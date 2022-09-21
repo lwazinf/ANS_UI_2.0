@@ -3,7 +3,7 @@ import {
   faGithub,
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
+import { faExpand, faGlobe, faGlobeAfrica } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ProfileBadge from "./modals/ProfileBadge";
@@ -11,7 +11,6 @@ import ProfileBadge from "./modals/ProfileBadge";
 interface ProfileHUDProps {}
 
 const ProfileHUD = ({}: ProfileHUDProps) => {
-  const [loading, setLoading] = useState(false);
   const [viewSwitch, setViewSwitch] = useState(false);
   return (
     <div
@@ -45,7 +44,9 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
               : "duration-[200ms] opacity-10 left-[-50px]"
           } flex flex-row`}
         >
-          <div className={`flex flex-col justify-center items-center h-full mr-1`}>
+          <div
+            className={`flex flex-col justify-center items-center h-full mr-1`}
+          >
             <div
               className={`w-[130px] hover:px-0 px-[1px] h-[100px] transition-all duration-300 cursor-pointer`}
             >
@@ -56,11 +57,24 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
           </div>
           <div className={`flex flex-col justify-center items-center h-full`}>
             <div
-              className={`flex flex-col  items-center h-[100px] w-[250px]`}
+              className={`flex flex-col items-left justify-center h-[80px] w-[250px]`}
             >
-              <p className={`text-[13px] text-[lightgrey] font-thin`}>
+              <p className={`text-[13px] text-[lightgrey] font-thin m-0`}>
                 The details of this page are currently under wraps!
+              </p>
+              <div className={`relative h-[50px] min-w-[50px] flex flex-row`}>
+                <p className={`text-[35px] text-white font-black mt-[-10px]`}>
+                  XY
                 </p>
+                <div className={`ml-[-5px]`}>
+                  <ProfileBadge
+                    loading={false}
+                    is_evaluated={true}
+                    is_verified={true}
+                    isDark={false}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -97,6 +111,46 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         >
           <FontAwesomeIcon icon={faExpand} />
         </div>
+
+        <div
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[60px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          onClick={() => {
+            
+          }}
+        >
+          <FontAwesomeIcon icon={faTwitter} />
+        </div>
+        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[60px] w-[100px] text-left`}>xylophonezy</p>
+
+        <div
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[90px] text-white cursor-pointer w-[18px] h-[18px] transition-all hover:opacity-70`}
+          onClick={() => {
+            
+          }}
+        >
+          <FontAwesomeIcon icon={faEthereum} />
+        </div>
+        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[95px] w-[100px] text-left`}>reedseal.eth</p>
+
+        <div
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[130px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          onClick={() => {
+            
+          }}
+        >
+          <FontAwesomeIcon icon={faGithub} />
+        </div>
+        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[130px] w-[100px] text-left`}>xylophonez</p>
+
+        <div
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[160px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          onClick={() => {
+            
+          }}
+        >
+          <FontAwesomeIcon icon={faGlobe} />
+        </div>
+        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[160px] w-[100px] text-left`}>permacast.dev</p>
       </div>
     </div>
   );
