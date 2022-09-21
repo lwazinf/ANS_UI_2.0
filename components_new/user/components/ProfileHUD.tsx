@@ -18,7 +18,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
     >
       <img
         className={`w-full h-full object-cover absolute top-0`}
-        src={`https://images.pexels.com/photos/345415/pexels-photo-345415.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`}
+        src={`https://images.pexels.com/photos/1714340/pexels-photo-1714340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}
       />
 
       <div
@@ -48,11 +48,13 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
             className={`flex flex-col justify-center items-center h-full mr-1`}
           >
             <div
-              className={`w-[130px] hover:px-0 px-[1px] h-[100px] transition-all duration-300 cursor-pointer`}
+              className={`w-[130px] hover:px-0 px-[1px] h-[100px] transition-all duration-300 cursor-pointer relative overflow-hidden`}
             >
               <div
-                className={`w-full h-full rounded-[2px] bg-white transition-all duration-300 cursor-pointer`}
-              />
+                className={`w-full h-full rounded-[6px] border-solid border-[1px] border-white/30 bg-white transition-all duration-300 cursor-pointer relative overflow-hidden`}
+              >
+                <img className={`w-full object-cover relative bottom-4`} src={`https://xy.ar.page/_next/image?url=https%3A%2F%2Fpz-prepnb.meson.network%2FgccevsQFGKM31yviMIRNvJ_MCoPeOf1RCDvr7AO2Dag&w=3840&q=70`}/>
+              </div>
             </div>
           </div>
           <div className={`flex flex-col justify-center items-center h-full`}>
@@ -80,13 +82,18 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         </div>
 
         <div
-          className={`absolute bottom-8 text-white w-full h-[15px] flex flex-row justify-center items-center text-[15px] font-black transition-all duration-300 hover:opacity-90 cursor-default ${
-            viewSwitch
-              ? "duration-[1500ms] opacity-70"
-              : "duration-[100ms] opacity-30"
-          }`}
+          className={`absolute bottom-9 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
         >
-          XYLOPHONE
+          
+          <p
+            className={`cursor-pointer text-white text-[15px] font-black transition-all duration-300 hover:opacity-90 ${
+              viewSwitch
+              ? "duration-[1500ms] opacity-900"
+              : "duration-[100ms] opacity-70"
+            }`}
+          >
+            XYLOPHONE
+          </p>
         </div>
 
         <div
@@ -120,7 +127,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         >
           <FontAwesomeIcon icon={faTwitter} />
         </div>
-        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[60px] w-[100px] text-left`}>xylophonezy</p>
+        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[60px] w-[100px] text-left`}>xylophonezy</p>
 
         <div
           className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[90px] text-white cursor-pointer w-[18px] h-[18px] transition-all hover:opacity-70`}
@@ -130,7 +137,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         >
           <FontAwesomeIcon icon={faEthereum} />
         </div>
-        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[95px] w-[100px] text-left`}>reedseal.eth</p>
+        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[95px] w-[100px] text-left`}>reedseal.eth</p>
 
         <div
           className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[130px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
@@ -140,7 +147,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         >
           <FontAwesomeIcon icon={faGithub} />
         </div>
-        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[130px] w-[100px] text-left`}>xylophonez</p>
+        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[130px] w-[100px] text-left`}>xylophonez</p>
 
         <div
           className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[160px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
@@ -150,7 +157,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         >
           <FontAwesomeIcon icon={faGlobe} />
         </div>
-        <p className={`text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-100 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0'} top-[160px] w-[100px] text-left`}>permacast.dev</p>
+        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[160px] w-[100px] text-left`}>permacast.dev</p>
       </div>
     </div>
   );
