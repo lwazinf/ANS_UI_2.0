@@ -59,7 +59,23 @@ html {
     );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endColorstr="#ffffff",GradientType=1);
   }
+
+  ._miniTitle {
+    transition: all 0.05s;
+    width: 200px;
+    height: 25px;
   
+    border-radius: 4px;
+    /* background: white; */
+  
+    position: absolute;
+    left: 15px;
+    bottom: 28px;
+  
+    margin: 5px;
+  
+    display: none;
+  }
 }
 
 #Tweets::-webkit-scrollbar {

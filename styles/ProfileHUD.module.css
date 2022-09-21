@@ -137,7 +137,7 @@
     margin: 5px;
   }
   
-  ._miniTitle {
+  /* ._miniTitle {
     transition: all 0.05s;
     width: 200px;
     height: 25px;
@@ -152,7 +152,7 @@
     margin: 5px;
   
     display: none;
-  }
+  } */
   
   ._controls {
     display: flex;
