@@ -8,21 +8,27 @@ interface UserContentProps {
 }
 
 const UserContent = ({data}: UserContentProps) => {
-    const [data_, setData_] = useState({})
-    const ARWEAVE_URL = 'https://arweave.net/'
+    const [currentANFT_, setCurrentANFT_] = useState(-1)
+    const ARWEAVE_URL = '/_next/image?url=https%3A%2F%2Farweave.net%2F'
   return (
     <div
       className={`w-[912px] h-[420px] flex flex-row justify-center items-center mx-auto`}
     >
-      <div className={`_container m-1`} />
+      <div className={`_container m-1`}>
+        {currentANFT_}
+      </div>
       <div className={`_container m-1`}>
         {
           data?.ANFTS.koii.map((nft, i) => {
             return (
-              <div key={nft.id} className={`_gridPost overflow-hidden relative`} onClick={() => {
-                console.log(nft.id)
+              <div key={nft.id} className={`_gridPost overflow-hidden relative rounded-[4px] flex flex-row justify-center items-center`} onClick={() => {
+                if(currentANFT_ == i){
+                  setCurrentANFT_(-1)
+                }else{
+                  setCurrentANFT_(i)
+                }
               }}>
-                <img className={`w-full object-cover`} src={ARWEAVE_URL + nft.id} />
+                <img className={`w-full h-full object-cover`} src={ARWEAVE_URL + nft.id + '&w=3840&q=75'} />
               </div>
             )
           })
