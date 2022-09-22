@@ -14,7 +14,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
   const [viewSwitch, setViewSwitch] = useState(true);
   return (
     <div
-      className={`w-[900px] h-[300px] rounded-[4px] shadow-md bg-black relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden`}
+      className={`w-[900px] h-[300px] rounded-[4px] shadow-md bg-black relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
     >
       <img
         className={`w-full h-full object-cover absolute top-0 ${viewSwitch ? 'opacity-60' : 'opacity-100'} transition-all duration-[800ms]`}

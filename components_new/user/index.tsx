@@ -12,6 +12,7 @@ import CoverPage from './components/CoverPage';
 import { Koii, ArweaveTransaction } from '../../src/types';
 import { Toaster } from 'react-hot-toast';
 import ProfileHUD from './components/ProfileHUD';
+import UserContent from './components/UserContent';
 
 function PageContent(props: userInfo) {
   const bio = typeof props.userInfo.bio === 'string' ? 
@@ -60,7 +61,8 @@ function PageContent(props: userInfo) {
           {/* <UserInfo user={{userInfo: info}} profile={arkProfile} /> */}
           <EditModal userColor={info.address_color} wallet={info.user} userInfo={props} /> 
           {/* @ts-ignore  sorry about this */}
-          <Widgets arkProfile={arkProfile}/>
+          {/* <Widgets arkProfile={arkProfile}/> */}
+          <UserContent data={arkProfile}/>
         </div>
       </div>
     </div>
