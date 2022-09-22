@@ -68,12 +68,14 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
             >
               <p className={`text-[13px] text-[lightgrey] font-thin m-0`}>
               {
+                // @ts-ignore
               data.ANS.bio
             }
               </p>
               <div className={`relative h-[50px] min-w-[50px] flex flex-row mt-1`}>
                 <p className={`text-[35px] text-white font-black mt-[-10px]`}>
                 {
+                // @ts-ignore
               data.ANS.currentLabel.toUpperCase()
             }
                 </p>
@@ -102,6 +104,7 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
             }`}
           >
             {
+                // @ts-ignore
               data.ANS.nickname.toUpperCase()
             }
           </p>
@@ -118,7 +121,8 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
             }`}
           >
             {
-              data.arweave_address
+                // @ts-ignore
+                data.arweave_address
             }
           </p>
         </div>
