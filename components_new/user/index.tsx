@@ -54,7 +54,7 @@ function PageContent(props: userInfo) {
     <div className="h-9 w-full font-inter ">
     <Toaster position='top-center'/>
 
-      <ProfileHUD/>
+      <ProfileHUD data={arkProfile}/>
       {/* <CoverPage userInfo={props.userInfo} /> */}
       <div className="flex xl:justify-center ">
         <div className="flex flex-col px-4 md:px-16 sm:px-10  max-w-[100vw] xl:max-w-[1145px] w-full">

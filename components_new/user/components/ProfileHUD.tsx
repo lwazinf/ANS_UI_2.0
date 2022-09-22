@@ -6,11 +6,14 @@ import {
 import { faExpand, faGlobe, faGlobeAfrica } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
-interface ProfileHUDProps {}
+interface ProfileHUDProps {
+  data: Res | undefined;
+}
 
-const ProfileHUD = ({}: ProfileHUDProps) => {
+const ProfileHUD = ({data}: ProfileHUDProps) => {
   const [viewSwitch, setViewSwitch] = useState(true);
   return (
     <div
@@ -28,6 +31,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
             : "duration-[1000ms] opacity-50"
         } transition-all`}
       />
+
       <img
         className={`w-[100px] h-[100px] rotate-[20deg] object-cover absolute top-[-10px] left-[10px] invert ${
           viewSwitch
@@ -36,6 +40,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         } transition-all`}
         src={`/ProfileHUD/ar_logo.png`}
       />
+
       <div className={`w-full h-full absolute top-0 p-[15px]`}>
         <div
           className={`w-[400px] h-[150px] absolute bottom-1 ${
@@ -45,7 +50,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
           } flex flex-row`}
         >
           <div
-            className={`flex flex-col justify-center items-center h-full mr-1`}
+            className={`flex flex-col justify-center items-center h-full mr-2`}
           >
             <div
               className={`w-[130px] hover:px-0 px-[1px] h-[100px] transition-all duration-300 cursor-pointer relative overflow-hidden`}
@@ -62,11 +67,15 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
               className={`flex flex-col items-left justify-center h-[80px] w-[250px]`}
             >
               <p className={`text-[13px] text-[lightgrey] font-thin m-0`}>
-                The details of this page are currently under wraps!
+              {
+              data.ANS.bio
+            }
               </p>
-              <div className={`relative h-[50px] min-w-[50px] flex flex-row`}>
+              <div className={`relative h-[50px] min-w-[50px] flex flex-row mt-1`}>
                 <p className={`text-[35px] text-white font-black mt-[-10px]`}>
-                  XY
+                {
+              data.ANS.currentLabel.toUpperCase()
+            }
                 </p>
                 <div className={`ml-[-5px]`}>
                   <ProfileBadge
@@ -82,17 +91,19 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
         </div>
 
         <div
-          className={`absolute bottom-9 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
+          className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
         >
           
           <p
             className={`cursor-pointer text-white text-[15px] font-black transition-all duration-300 hover:opacity-90 ${
               viewSwitch
-              ? "duration-[1500ms] opacity-900"
+              ? "duration-[1500ms] opacity-90"
               : "duration-[100ms] opacity-70"
             }`}
           >
-            XYLOPHONE
+            {
+              data.ANS.nickname.toUpperCase()
+            }
           </p>
         </div>
 
@@ -102,11 +113,13 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
           <p
             className={`cursor-pointer text-white text-[12px] font-thin transition-all duration-300 hover:opacity-90 ${
               viewSwitch
-                ? "duration-[1000ms] opacity-60"
-                : "duration-[100ms] opacity-50"
+                ? "duration-[1000ms] opacity-30"
+                : "duration-[1000ms] opacity-50"
             }`}
           >
-            0x34F4K3KJBKJBKJBHBKJBK555445JJ432BKLNL34HG5S5Z
+            {
+              data.arweave_address
+            }
           </p>
         </div>
 

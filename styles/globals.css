@@ -77,60 +77,24 @@ html {
     display: none;
   }
 
-  ._container {
+  ._grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 4px;
     row-gap: 4px;
-
-    /* background: red; */
-
-    justify-content: space-between;    /* horizontal alignment of grid tracks */
-    align-content: flex-start; 
-  
-    padding: 2px;
-  
-    /* align-content: space-evenly; */
-    align-items: center;
-    /* justify-content: space-evenly; */
-    justify-items: center;
-  
-    transition: all 0.1s;
-  
-    height: 412px;
-    width: 452px;
+    
     overflow: hidden;
     overflow-y: scroll;
     -ms-overflow-style: none; /* Internet Explorer 10+ */
     scrollbar-width: none; /* Firefox */
-  
-    background: ghostwhite;
-    opacity: 1;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    border-radius: 6px;
-  
-    /* margin: 4px; */
   }
   
-  ._container::-webkit-scrollbar {
+  ._grid::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
   }
-  
-  ._gridPost {
-    transition: all 0.4s;
-    
-    width: 145px;
-    height: 145px;
-    padding: 1px;
 
-    display: flex;
-    justify-content: center;
-  align-items: center;
-  
-    border-radius: 6px;
-    
-    cursor: pointer;
-    opacity: 1;
+  ._container {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   }
 }
 

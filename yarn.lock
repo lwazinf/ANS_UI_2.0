@@ -5582,6 +5582,11 @@ text-table@^0.2.0:
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+timestamp-conv@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/timestamp-conv/-/timestamp-conv-3.0.0.tgz#0cef0d2d11a04d37cb93409d57ff29a83110e237"
+  integrity sha512-uJ447uXj3WY4KSbuIz2owCo/dDXvvsaIMpPpxjY3CQ1gzKdtXZRqaF1V6ZDKZev6dsbskKTEJB2ZnsQjupYy+A==
+
 tippy.js@^6.3.7:
   version "6.3.7"
   resolved "https://registry.npmjs.org/tippy.js/-/tippy.js-6.3.7.tgz"
