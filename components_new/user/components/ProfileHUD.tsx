@@ -58,6 +58,7 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
               <div
                 className={`w-full h-full rounded-[4px] bg-white transition-all duration-300 cursor-pointer relative overflow-hidden`}
               >
+                {/* @ts-ignore */}
                 <img className={`w-full object-cover relative bottom-4`} src={`_next/image?url=https%3A%2F%2Fpz-prepnb.meson.network%2F${data.ANS.avatar}&w=3840&q=70`}/>
               </div>
             </div>
