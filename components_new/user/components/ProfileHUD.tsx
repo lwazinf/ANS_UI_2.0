@@ -14,10 +14,10 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
   const [viewSwitch, setViewSwitch] = useState(true);
   return (
     <div
-      className={`w-[900px] h-[300px] rounded-[4px] shadow-md bg-[ghostwhite] relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden`}
+      className={`w-[900px] h-[300px] rounded-[4px] shadow-md bg-black relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden`}
     >
       <img
-        className={`w-full h-full object-cover absolute top-0`}
+        className={`w-full h-full object-cover absolute top-0 ${viewSwitch ? 'opacity-60' : 'opacity-100'} transition-all duration-[800ms]`}
         src={`https://images.pexels.com/photos/1714340/pexels-photo-1714340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}
       />
 
@@ -51,7 +51,7 @@ const ProfileHUD = ({}: ProfileHUDProps) => {
               className={`w-[130px] hover:px-0 px-[1px] h-[100px] transition-all duration-300 cursor-pointer relative overflow-hidden`}
             >
               <div
-                className={`w-full h-full rounded-[6px] border-solid border-[1px] border-white/30 bg-white transition-all duration-300 cursor-pointer relative overflow-hidden`}
+                className={`w-full h-full rounded-[4px] bg-white transition-all duration-300 cursor-pointer relative overflow-hidden`}
               >
                 <img className={`w-full object-cover relative bottom-4`} src={`https://xy.ar.page/_next/image?url=https%3A%2F%2Fpz-prepnb.meson.network%2FgccevsQFGKM31yviMIRNvJ_MCoPeOf1RCDvr7AO2Dag&w=3840&q=70`}/>
               </div>
