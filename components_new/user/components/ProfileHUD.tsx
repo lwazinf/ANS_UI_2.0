@@ -152,44 +152,46 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
         </div>
 
         <div
-          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[60px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[60px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70 flex flex-row`}
           onClick={() => {
             
           }}
         >
           <FontAwesomeIcon icon={faTwitter} />
+          <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'opacity-80 duration-[1200ms]' : 'duration-300 opacity-0 pointer-events-none'} min-w-[20px] text-left left-[25px]`}>xylophonezy</p>
         </div>
-        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[60px] w-[100px] text-left`}>xylophonezy</p>
 
         <div
-          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[90px] text-white cursor-pointer w-[18px] h-[18px] transition-all hover:opacity-70`}
+          className={`absolute ${viewSwitch ? 'right-[146px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[90px] text-white cursor-pointer w-[24px] h-[24px] transition-all hover:opacity-70 flex flex-row`}
           onClick={() => {
             
           }}
         >
-          <FontAwesomeIcon icon={faEthereum} />
+          <FontAwesomeIcon icon={faEthereum}  />
+          <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'opacity-80 duration-[1200ms]' : 'duration-300 opacity-0 pointer-events-none'} min-w-[20px] text-left top-[5px] left-[25px]`}>reedseal.eth</p>
         </div>
-        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[95px] w-[100px] text-left`}>reedseal.eth</p>
 
         <div
-          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[130px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[130px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70 flex flex-row`}
           onClick={() => {
             
           }}
         >
           <FontAwesomeIcon icon={faGithub} />
+        
+        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'opacity-80 duration-[1200ms]' : 'duration-300 opacity-0 pointer-events-none'} min-w-[20px] text-left left-[25px]`}>xylophonez</p>
         </div>
-        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[130px] w-[100px] text-left`}>xylophonez</p>
 
         <div
-          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[160px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70`}
+          className={`absolute ${viewSwitch ? 'right-[150px] opacity-100 duration-[800ms]' : 'right-3 duration-500 opacity-40'} top-[160px] text-white cursor-pointer w-[20px] h-[20px] transition-all hover:opacity-70 flex flex-row`}
           onClick={() => {
             
           }}
         >
           <FontAwesomeIcon icon={faGlobe} />
+          <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'opacity-80 duration-[1200ms]' : 'duration-300 opacity-0 pointer-events-none'} min-w-[20px] text-left left-[25px]`}>permacast.dev</p>
         </div>
-        <p className={`font-thin text-white cursor-pointer text-[13px] m-0 p-0 absolute ${viewSwitch ? 'right-[40px] opacity-80 duration-[800ms]' : 'right-[-12px] duration-500 opacity-0 pointer-events-none'} top-[160px] w-[100px] text-left`}>permacast.dev</p>
+        
       </div>
     </div>
   );

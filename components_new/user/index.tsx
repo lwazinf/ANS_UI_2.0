@@ -61,8 +61,8 @@ function PageContent(props: userInfo) {
           {/* <UserInfo user={{userInfo: info}} profile={arkProfile} /> */}
           <EditModal userColor={info.address_color} wallet={info.user} userInfo={props} /> 
           {/* @ts-ignore  sorry about this */}
-          <Widgets arkProfile={arkProfile}/>
-          {/* <UserContent data={arkProfile}/> */}
+          {/* <Widgets arkProfile={arkProfile}/> */}
+          <UserContent data={arkProfile}/>
         </div>
       </div>
     </div>
