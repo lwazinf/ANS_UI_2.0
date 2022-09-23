@@ -25,7 +25,7 @@ const months_ = {
 
 const UserContent = ({ data }: UserContentProps) => {
   const [currentANFT_, setCurrentANFT_] = useState(-1);
-  const [viewDesc_, setViewDesc_] = useState(true);
+  const [viewDesc_, setViewDesc_] = useState(false);
   const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
   return (
     <div
@@ -34,6 +34,34 @@ const UserContent = ({ data }: UserContentProps) => {
       <div
         className={`h-[412px] w-[452px] rounded-[4px] bg-[#e8e8e8] transition-all duration-200 overflow-hidden m-1 p-1 _container relative`}
       >
+        <img
+          src={`${
+            currentANFT_ != -1
+              ? ARWEAVE_URL + data?.ANFTS.koii[currentANFT_].id + "&w=3840&q=75"
+              : ""
+          }`}
+          className={`absolute top-0 left-0 w-full h-full object-cover transition-all duration-[800ms] ${
+            currentANFT_ != -1 ? "opacity-20" : "opacity-0"
+          }`}
+        />
+
+        <div
+          className={`backdrop-blur-xl bg-white/30 h-full w-full absolute top-0 left-0`}
+        />
+
+        <div
+          className={`w-full h-[70px] flex flex-col justify-center items-center absolute bottom-0 left-0`}
+        >
+          {currentANFT_ != -1 ? (
+            <a
+              href={`https://koi.rocks/content-detail/${data?.ANFTS.koii[currentANFT_].id}`}
+            >
+              <p className={`text-[14px] text-black/30 font-thin`}>View on Koii</p>
+            </a>
+          ) : (
+            <div />
+          )}
+        </div>
         <div
           className={`absolute ${
             currentANFT_ != -1
@@ -81,7 +109,7 @@ const UserContent = ({ data }: UserContentProps) => {
             </div>
           </div>
           <div
-            className={`w-[430px] h-[250px] rounded-[6px] overflow-hidden relative`}
+            className={`w-[430px] h-[250px] rounded-[6px] overflow-hidden relative cursor-pointer`}
             onClick={() => {
               setViewDesc_(!viewDesc_);
             }}
@@ -90,7 +118,7 @@ const UserContent = ({ data }: UserContentProps) => {
               <img
                 className={`w-full h-full object-cover transition-all ${
                   viewDesc_
-                    ? "duration-[200ms] opacity-10"
+                    ? "duration-[200ms] opacity-60"
                     : "duration-[500ms] opacity-100"
                 }`}
                 src={
@@ -103,20 +131,29 @@ const UserContent = ({ data }: UserContentProps) => {
               <div />
             )}
             <div
+              className={`backdrop-blur-xl bg-white/30 w-full h-full absolute top-0 left-0
+            ${
+              viewDesc_
+                ? "duration-[200ms] opacity-100"
+                : "duration-[500ms] opacity-0"
+            }`}
+            />
+            <div
               className={`h-full w-full absolute top-0 left-0 flex flex-col justify-center items-center  ${
                 !viewDesc_
                   ? "duration-[200ms] opacity-0"
                   : "duration-[800ms] opacity-100"
               }`}
             >
-              {
-              currentANFT_ != -1
-                ?
-                <div className={`w-[320px] h-full text-center mx-auto font-black text-black/60 text-[15px] flex flex-col justify-center items-center`}> 
-                {data?.ANFTS.koii[currentANFT_].description}
+              {currentANFT_ != -1 ? (
+                <div
+                  className={`w-[320px] h-full text-center mx-auto font-black text-black/60 text-[15px] flex flex-col justify-center items-center`}
+                >
+                  {data?.ANFTS.koii[currentANFT_].description}
                 </div>
-                : ""
-                }
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className={`w-full h-[38px]`} />
@@ -133,10 +170,10 @@ const UserContent = ({ data }: UserContentProps) => {
               onClick={() => {
                 if (currentANFT_ == i) {
                   setCurrentANFT_(-1);
-                  setViewDesc_(true)
+                  setViewDesc_(false);
                 } else {
                   setCurrentANFT_(i);
-                  setViewDesc_(true)
+                  setViewDesc_(false);
                 }
               }}
             >

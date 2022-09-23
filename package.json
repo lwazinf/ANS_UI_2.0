@@ -38,6 +38,7 @@
     "react-icons": "^4.4.0",
     "react-loader-spinner": "^6.0.0-0",
     "react-markdown": "^8.0.0",
+    "react-qr-code": "^2.0.8",
     "react-rounded-image": "^2.0.14",
     "react-select-search": "^3.0.10",
     "recoil": "^0.6.1",
