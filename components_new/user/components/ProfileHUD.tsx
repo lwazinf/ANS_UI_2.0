@@ -11,6 +11,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import QRCode from "react-qr-code";
+import { useRecoilState } from "recoil";
+import { isDarkMode } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
@@ -21,7 +23,8 @@ interface ProfileHUDProps {
 const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [viewSwitch_, setViewSwitch_] = useState(true);
   const [viewQR_, setViewQR_] = useState(true);
-  const [isDark_, setIsDark_] = useState(true);
+  const [isDark_, setIsDark_] = useState(false);
+  // const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
   return (
     <div
       className={`w-[900px] h-[300px] rounded-[4px] shadow-md ${isDark_ ? 'bg-black' : 'bg-white'} relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
@@ -44,10 +47,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       />
 
       <div
-        className={`_filter ${isDark_ ? 'invert-0' : 'invert'} w-full h-full absolute top-0 ${
+        className={`${isDark_ ? 'invert-0' : 'invert'} w-full h-full absolute top-0 _filter ${
           viewSwitch_
             ? "duration-[400ms] opacity-100"
-            : "duration-[800ms] opacity-50"
+            : "duration-[800ms] opacity-20"
         } transition-all`}
       />
 

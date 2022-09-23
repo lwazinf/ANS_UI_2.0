@@ -73,8 +73,19 @@ const UserContent = ({ data }: UserContentProps) => {
             className={`w-full h-[60px] flex flex-row px-[20px] items-center`}
           >
             <div
-              className={`h-[45px] w-[45px] rounded-[50%] bg-black/20 mr-2 shadow-md`}
-            ></div>
+              className={`h-[45px] w-[45px] rounded-[50%] bg-black/20 mr-2 shadow-md relative overflow-hidden`}
+            >
+              {data ? (
+            // <img className={`w-full h-full object-cover`} src={`https://arweave.net/${data.ANS.avatar}`}/>
+            // ND - using 'meson.network' for the profile pictures. May only work on xy account.
+            <img
+              className={`w-full h-full object-cover absolute top-0 right-0 transition-all`}
+              src={`https://pz-prepnb.meson.network/${data.ANS.avatar}`}
+            />
+          ) : (
+            <div />
+          )}
+            </div>
             <div
               className={`h-[55px] min-w-[60px] flex flex-row items-center pb-[1px]`}
             >
