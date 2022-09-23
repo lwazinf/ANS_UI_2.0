@@ -58,8 +58,14 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
               <div
                 className={`w-full h-full rounded-[4px] bg-white transition-all duration-300 cursor-pointer relative overflow-hidden`}
               >
-                {/* @ts-ignore */}
-                <img className={`w-full object-cover relative bottom-4`} src={`_next/image?url=https%3A%2F%2Fpz-prepnb.meson.network%2F${data.ANS.avatar}&w=3840&q=70`}/>
+                {
+                data ? 
+                // <img className={`w-full h-full object-cover`} src={`https://arweave.net/${data.ANS.avatar}`}/>
+                // ND - using 'meson.network' for the profile pictures. May only work on xy account.
+                <img className={`w-full h-full object-cover`} src={`https://pz-prepnb.meson.network/${data.ANS.avatar}`}/>
+                :
+                <div />
+                }
               </div>
             </div>
           </div>
@@ -69,15 +75,19 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
             >
               <p className={`text-[13px] text-[lightgrey] font-thin m-0`}>
               {
-                // @ts-ignore
+              data ?
               data.ANS.bio
+              :
+              ''
             }
               </p>
               <div className={`relative h-[50px] min-w-[50px] flex flex-row mt-1`}>
                 <p className={`text-[35px] text-white font-black mt-[-10px]`}>
                 {
-                // @ts-ignore
+              data ? 
               data.ANS.currentLabel.toUpperCase()
+              :
+              ''
             }
                 </p>
                 <div className={`ml-[-5px]`}>
@@ -98,15 +108,17 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
         >
           
           <p
-            className={`cursor-pointer text-white text-[15px] font-black transition-all duration-300 hover:opacity-90 ${
+            className={`cursor-pointer text-white text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
               viewSwitch
-              ? "duration-[1500ms] opacity-90"
+              ? "duration-[1500ms] opacity-100"
               : "duration-[100ms] opacity-70"
             }`}
           >
             {
-                // @ts-ignore
+              data ? 
               data.ANS.nickname.toUpperCase()
+              :
+              ''
             }
           </p>
         </div>
@@ -118,12 +130,14 @@ const ProfileHUD = ({data}: ProfileHUDProps) => {
             className={`cursor-pointer text-white text-[12px] font-thin transition-all duration-300 hover:opacity-90 ${
               viewSwitch
                 ? "duration-[1000ms] opacity-30"
-                : "duration-[1000ms] opacity-50"
+                : "duration-[1000ms] opacity-30"
             }`}
           >
             {
-                // @ts-ignore
-                data.arweave_address
+              data ? 
+              data.arweave_address
+              :
+              ''
             }
           </p>
         </div>
