@@ -66,7 +66,13 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       <div className={`w-full h-full absolute top-0 p-[15px]`}>
         <div
           className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
-        >
+        > 
+        <div className={`${isDark_ ? 'bg-black/40' : 'bg-white/40'} transition-all duration-[200ms] min-w-[50px] h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
+        ${
+              !viewSwitch_
+                ? "opacity-100 backdrop-blur-sm"
+                : "opacity-0 backdrop-blur-none"
+            }`}>
           <p
             className={`cursor-pointer ${isDark_ ? 'text-white' : 'text-black'} text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
               viewSwitch_
@@ -76,6 +82,30 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           >
             {data ? data.ANS.nickname.toUpperCase() : ""}
           </p>
+        </div>
+        </div>
+      </div>
+
+      <div className={`w-full h-full absolute top-0 p-[15px]`}>
+        <div
+          className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
+        > 
+        <div className={`transition-all duration-[200ms] min-w-[50px] h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
+        ${
+              !viewSwitch_
+                ? "opacity-0"
+                : "opacity-100"
+            }`}>
+          <p
+            className={`cursor-pointer ${isDark_ ? 'text-white' : 'text-black'} text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
+              viewSwitch_
+                ? "duration-[1500ms] opacity-100"
+                : "duration-[100ms] opacity-70"
+            }`}
+          >
+            {data ? data.ANS.nickname.toUpperCase() : ""}
+          </p>
+        </div>
         </div>
       </div>
 
