@@ -173,7 +173,7 @@ const UserContent = ({ data }: UserContentProps) => {
           return (
             <div
               key={nft.id}
-              className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all duration-200`}
+              className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all ${currentANFT_ == i ? 'opacity-100 duration-[500ms]' : 'opacity-30 duration-[200ms]'}`}
               onClick={() => {
                 if (currentANFT_ == i) {
                   setCurrentANFT_(-1);
