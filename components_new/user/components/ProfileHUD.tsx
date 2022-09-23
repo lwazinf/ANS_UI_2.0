@@ -32,6 +32,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         src={`https://images.pexels.com/photos/1714340/pexels-photo-1714340.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1`}
       />
 
+      <div className={`w-full h-full bg-black/5 backdrop-blur-sm absolute top-0 left-0 ${
+          viewSwitch_ ? "opacity-100 duration-[200ms]" : "opacity-0 duration-[800ms]"
+        } transition-all`}/>
+
       <div
         className={`_filter w-full h-full absolute top-0 ${
           viewSwitch_
@@ -123,10 +127,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           className={`absolute bottom-4 w-full h-[15px] flex flex-row justify-center items-center`}
         >
           <p
-            className={`cursor-pointer text-white text-[12px] font-thin transition-all duration-300 hover:opacity-90 ${
+            className={`cursor-pointer text-white text-[12px] font-thin transition-all duration-300 hover:opacity-70 ${
               viewSwitch_
                 ? "duration-[1000ms] opacity-30"
-                : "duration-[1000ms] opacity-30"
+                : "duration-[1000ms] opacity-10"
             }`}
           >
             {data ? data.arweave_address : ""}

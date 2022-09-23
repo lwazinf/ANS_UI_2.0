@@ -80,7 +80,7 @@ const UserContent = ({ data }: UserContentProps) => {
             >
               {currentANFT_ != -1 ? (
                 <div className={``}>
-                  <p className={`font-semibold text-black/80 text-[15px]`}>
+                  <p className={`font-semibold text-black/80 text-[15px] w-[250px] truncate`}>
                     {data?.ANFTS.koii[currentANFT_].title}
                   </p>
                   <p className={`font-thin text-black/40 text-[12px]`}>
