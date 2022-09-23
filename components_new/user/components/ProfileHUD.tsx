@@ -21,9 +21,10 @@ interface ProfileHUDProps {
 const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [viewSwitch_, setViewSwitch_] = useState(true);
   const [viewQR_, setViewQR_] = useState(true);
+  const [isDark_, setIsDark_] = useState(true);
   return (
     <div
-      className={`w-[900px] h-[300px] rounded-[4px] shadow-md bg-black relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
+      className={`w-[900px] h-[300px] rounded-[4px] shadow-md ${isDark_ ? 'bg-black' : 'bg-white'} relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
     >
       <img
         className={`w-full h-full object-cover absolute top-0 ${
@@ -35,7 +36,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       />
 
       <div
-        className={`w-full h-full bg-black/5 backdrop-blur-sm absolute top-0 left-0 ${
+        className={`w-full h-full ${isDark_ ? 'bg-black/30' : 'bg-white/30'} backdrop-blur-sm absolute top-0 left-0 ${
           viewSwitch_
             ? "opacity-100 duration-[400ms]"
             : "opacity-0 duration-[800ms]"
@@ -43,7 +44,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       />
 
       <div
-        className={`_filter w-full h-full absolute top-0 ${
+        className={`_filter ${isDark_ ? 'invert-0' : 'invert'} w-full h-full absolute top-0 ${
           viewSwitch_
             ? "duration-[400ms] opacity-100"
             : "duration-[800ms] opacity-50"
@@ -51,7 +52,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       />
 
       <img
-        className={`w-[100px] h-[100px] rotate-[20deg] object-cover absolute top-[-10px] left-[10px] invert ${
+        className={`w-[100px] h-[100px] rotate-[20deg] object-cover absolute top-[-10px] left-[10px] ${isDark_ ? 'invert' : 'invert-0'} ${
           viewSwitch_
             ? "duration-[800ms] opacity-40"
             : "duration-[400ms] opacity-20"
@@ -64,7 +65,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
         >
           <p
-            className={`cursor-pointer text-white text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
+            className={`cursor-pointer ${isDark_ ? 'text-white' : 'text-black'} text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
               viewSwitch_
                 ? "duration-[1500ms] opacity-100"
                 : "duration-[100ms] opacity-70"
@@ -90,63 +91,63 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
           >
             <div
-              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] text-white/40 flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
+              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
               BlackPages_
             </div>
             <FontAwesomeIcon
               icon={faTwitter}
-              className={`text-center duration-[200ms] transition-all hover:text-white text-white/80 w-[20px] h-[20px]`}
+              className={`text-center duration-[200ms] transition-all ${isDark_ ? 'hover:text-white text-white/80' : 'hover:text-black text-black/80'} w-[20px] h-[20px]`}
             />
           </div>
           <div
             className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
           >
             <div
-              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] text-white/40 flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
+              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
               BlackPages_
             </div>
             <FontAwesomeIcon
               icon={faEthereum}
-              className={`text-center duration-[200ms] transition-all hover:text-white text-white/80 w-[20px] h-[20px]`}
+              className={`text-center duration-[200ms] transition-all ${isDark_ ? 'hover:text-white text-white/80' : 'hover:text-black text-black/80'} w-[20px] h-[20px]`}
             />
           </div>
           <div
             className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
           >
             <div
-              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] text-white/40 flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
+              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
               BlackPages_
             </div>
             <FontAwesomeIcon
               icon={faGithub}
-              className={`text-center duration-[200ms] transition-all hover:text-white text-white/80 w-[20px] h-[20px]`}
+              className={`text-center duration-[200ms] transition-all ${isDark_ ? 'hover:text-white text-white/80' : 'hover:text-black text-black/80'} w-[20px] h-[20px]`}
             />
           </div>
           <div
             className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
           >
             <div
-              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] text-white/40 flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
+              className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
               BlackPages_
             </div>
             <FontAwesomeIcon
               icon={faGlobe}
-              className={`text-center duration-[200ms] transition-all hover:text-white text-white/80 w-[20px] h-[20px]`}
+              className={`text-center duration-[200ms] transition-all ${isDark_ ? 'hover:text-white text-white/80' : 'hover:text-black text-black/80'} w-[20px] h-[20px]`}
             />
           </div>
         </div>
 
         <div
-          className={`transition-all p-1 m-2 relative ${
+          className={`transition-all p-1 m-2 relative overflow-hidden ${
             viewQR_ ? "w-[120px] h-[120px]" : "w-[120px] h-[120px]"
-          } rounded-[2px] bg-white hover:opacity-100 cursor-pointer ${
+          } rounded-[2px] ${isDark_ ? 'bg-white' : 'bg-black'} hover:opacity-100 cursor-pointer ${
             viewSwitch_
               ? "opacity-80 pointer-events-auto duration-[400ms]"
-              : "opacity-10 pointer-events-none duration-[800ms]"
+              : "opacity-0 pointer-events-none duration-[800ms]"
           }`}
           onClick={() => {
             setViewQR_(!viewQR_);
@@ -155,7 +156,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           {data ? (
             <QRCode
               size={256}
-              className={`w-full h-full ${
+              className={`w-full h-full ${isDark_ ? 'invert-0' : 'invert'} ${
                 viewQR_ ? "opacity-100 duration-500" : "opacity-0 duration-200"
               }`}
               value={`https://${data?.ANS.currentLabel}.ar.page`}
@@ -183,19 +184,19 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           className={`flex flex-col justify-start items-center pt-3 h-[120px] ${
             viewSwitch_
               ? "opacity-100 pointer-events-auto duration-[400ms]"
-              : "opacity-10 pointer-events-none duration-[800ms]"
+              : "opacity-0 pointer-events-none duration-[800ms]"
           }`}
         >
           <div
             className={`flex flex-col items-left justify-center h-[80px] w-[250px]`}
           >
-            <p className={`text-[13px] text-[lightgrey]/60 font-thin m-0`}>
+            <p className={`text-[13px] ${isDark_ ? 'text-white/70' : 'text-black'} font-thin m-0`}>
               {data ? data.ANS.bio : ""}
             </p>
             <div
               className={`relative h-[50px] min-w-[50px] flex flex-row mt-1`}
             >
-              <p className={`text-[35px] text-white font-black mt-[-10px]`}>
+              <p className={`text-[35px] ${isDark_ ? 'text-white' : 'text-black'} font-black mt-[-10px]`}>
                 {data ? data.ANS.currentLabel.toUpperCase() : ""}
               </p>
               <div className={`ml-[-5px]`}>
@@ -215,18 +216,21 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         className={`absolute bottom-4 w-full h-[15px] flex flex-row justify-center items-center`}
       >
         <p
-          className={`cursor-pointer text-white text-[12px] font-thin transition-all duration-300 hover:opacity-70 ${
+          className={`cursor-pointer ${isDark_ ? 'text-white' : 'text-black'} text-[12px] font-thin transition-all duration-300 hover:opacity-70 ${
             viewSwitch_
               ? "duration-[1000ms] opacity-30"
-              : "duration-[1000ms] opacity-10"
+              : "duration-[1000ms] opacity-0"
           }`}
+          onClick={() => {
+            setIsDark_(!isDark_)
+          }}
         >
           {data ? data.arweave_address : ""}
         </p>
       </div>
 
       <div
-          className={`absolute right-3 bottom-4 text-white cursor-pointer w-[15px] h-[15px] transition-all duration-300 opacity-100 hover:opacity-70`}
+          className={`absolute right-3 bottom-4 ${isDark_ ? 'text-white' : 'text-black'} cursor-pointer w-[15px] h-[15px] transition-all duration-300 opacity-100 hover:opacity-70`}
           onClick={() => {
             setViewSwitch_(!viewSwitch_);
           }}
