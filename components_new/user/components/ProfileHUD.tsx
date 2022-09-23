@@ -87,7 +87,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`flex flex-col items-left justify-center h-[80px] w-[250px]`}
             >
-              <p className={`text-[13px] text-[lightgrey] font-thin m-0`}>
+              <p className={`text-[13px] text-[lightgrey]/60 font-thin m-0`}>
                 {data ? data.ANS.bio : ""}
               </p>
               <div

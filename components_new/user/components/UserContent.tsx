@@ -83,6 +83,7 @@ const UserContent = ({ data }: UserContentProps) => {
                   <p className={`font-semibold text-black/80 text-[15px] w-[250px] truncate`}>
                     {data?.ANFTS.koii[currentANFT_].title}
                   </p>
+                  <div className={`h-[13px] flex flex-row`}>
                   <p className={`font-thin text-black/40 text-[12px]`}>
                     {`Acquired on ${new Converter.date(
                       data?.ANFTS.koii[currentANFT_].timestamp
@@ -97,11 +98,17 @@ const UserContent = ({ data }: UserContentProps) => {
                       ]
                     }, ${new Converter.date(
                       data?.ANFTS.koii[currentANFT_].timestamp
-                    ).getYear()} (${data?.ANFTS.koii[currentANFT_].poster.slice(
+                    ).getYear()}`}
+                  </p>
+                  <p className={`ml-1 font-medium italic text-black/80 text-[12px]`}>
+                  {
+                  '('+data?.ANFTS.koii[currentANFT_].poster.slice(
                       0,
                       4
-                    )}...${data?.ANFTS.koii[currentANFT_].poster.slice(-4)})`}
+                    )+'...'+data?.ANFTS.koii[currentANFT_].poster.slice(-4)+')'
+                    }
                   </p>
+                  </div>
                 </div>
               ) : (
                 ""
