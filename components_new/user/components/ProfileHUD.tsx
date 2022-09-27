@@ -140,7 +140,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             />
           </div>
           <div
-            className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
+            className={`w-[20px] hover:w-[120px] cursor-default duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
           >
             <div
               className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
