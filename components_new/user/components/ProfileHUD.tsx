@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
-import { isDarkMode } from "../../../atoms";
+import { extendDash, isDarkMode } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
@@ -25,6 +25,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [viewQR_, setViewQR_] = useState(true);
   const [isDark_, setIsDark_] = useState(false);
   // const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
+  const [dash_, setDash_] = useRecoilState(extendDash);
   return (
     <div
       className={`w-[900px] h-[300px] rounded-[4px] shadow-md ${isDark_ ? 'bg-black' : 'bg-white'} relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
@@ -255,11 +256,49 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               : "duration-[1000ms] opacity-0"
           }`}
           onClick={() => {
-            setIsDark_(!isDark_)
           }}
         >
           {data ? data.arweave_address : ""}
         </p>
+
+        <div
+          className={`cursor-pointer ${isDark_ ? 'text-white' : 'text-black'} ml-2 flex flex-row min-w-2 absolute left-0 text-[12px] font-thin transition-all duration-300`}
+          onClick={() => {
+          }}
+        >
+          <p className={`m-2 cursor-pointer hover:opacity-70 ${
+            viewSwitch_
+              ? "duration-[1000ms] opacity-30"
+              : "duration-[1000ms] opacity-0"
+          }`} onClick={() => {
+            dash_ ?
+            setDash_(false)
+            :
+            setDash_(true)
+          }}>
+            {
+            dash_ ?
+            'Transactions'
+            :
+            'Assets'
+          }
+          </p>
+
+          <p className={`m-2 cursor-pointer hover:opacity-70 ${
+            viewSwitch_
+              ? "duration-[1000ms] opacity-30"
+              : "duration-[1000ms] opacity-0"
+          }`} onClick={() => {
+            setIsDark_(!isDark_)
+          }}>
+            {
+            isDark_ ?
+              'Light'
+              :
+              'Dark'
+          }
+          </p>
+        </div>
       </div>
 
       <div

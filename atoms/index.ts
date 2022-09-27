@@ -2,10 +2,6 @@ import { atom } from "recoil";
 import { userInfo } from "../src/types";
 type uploadType = {ContentType: string; data: number[]} | null
 
-
-
-
-
 export const isPendingTX = atom<boolean>({
     key: 'isPendingTX',
     default: false,
@@ -46,3 +42,9 @@ export const userInfoState = atom<userInfo | null>({
     key: 'userInfoState',
     default: null,
 })
+
+// Dashboard control
+export const extendDash = atom<boolean>({
+    key: 'extendDash',
+    default: false,
+});
