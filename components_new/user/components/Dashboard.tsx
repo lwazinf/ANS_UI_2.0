@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Nfts } from "../../../components/Nfts";
 import { Res } from "../../../src/types";
 const Converter = require("timestamp-conv");
-import d3 from "d3-scale";
+// import d3 from "d3-scale";
+import d3 from "d3";
 import { extendDash } from "../../../atoms";
 import { useRecoilState } from "recoil";
 
@@ -32,17 +33,6 @@ const Dashboard = ({ data }: DashboardProps) => {
   const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
   const [dash_, setDash_] = useRecoilState(extendDash);
 
-  // const xScale = d3
-  //   .scaleBand()
-  //   .domain(data?.ERC_NFTS.map((nft, i) => i))
-  //   .range([0, 2]);
-
-  // const yScale = d3.scaleLinear()
-  //   .domain([0, 1])
-  //   .range([0, 2]);
-
-  // const d3Chart = useRef();
-
   return (
     <div
       className={`w-[912px] h-[420px] flex flex-row justify-center items-center mx-auto`}
@@ -68,15 +58,9 @@ const Dashboard = ({ data }: DashboardProps) => {
         <div
           className={`w-full h-full absolute top-0 flex flex-row justify-center items-center`}
         >
-          {/* <svg className={`overflow-visible`}>
-            {
-              data?.ERC_NFTS.map((nft, i) => {
-                <div className={`w-[20px] h-[20px] bg-black rounded-[50%] m-1`} key={i}>
-
-                </div>
-              })
-            }
-          </svg> */}
+         {
+          data?.POAPS.toString()
+         }
         </div>
 
         <div

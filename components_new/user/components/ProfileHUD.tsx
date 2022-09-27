@@ -127,7 +127,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
-              BlackPages_
+              {
+                data ?
+                <a href={'https://twitter.com/'+data.ANS.links.twitter} target={'_blank'} rel={'noreferrer'}>{data.ANS.links.twitter}</a>
+                :
+                'Unknown'
+              }
             </div>
             <FontAwesomeIcon
               icon={faTwitter}
@@ -140,7 +145,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
-              BlackPages_
+              {
+                data ?
+                data.ENS
+                :
+                'Unknown'
+              }
             </div>
             <FontAwesomeIcon
               icon={faEthereum}
@@ -153,7 +163,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
-              BlackPages_
+              {
+                data ?
+                <a href={'https://github.com/'+data.ANS.links.github} target={'_blank'} rel={'noreferrer'}>{data.ANS.links.github}</a>
+                :
+                'Unknown'
+              }
             </div>
             <FontAwesomeIcon
               icon={faGithub}
@@ -166,7 +181,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${isDark_ ? 'text-white/40' : 'text-black/60'} flex flex-col justify-center hover:opacity-100 opacity-0 duration-300 transition-all`}
             >
-              BlackPages_
+              {
+                data ?
+                <a href={data.ANS.links.customUrl} target={'_blank'} rel={'noreferrer'}>{data.ANS.links.customUrl.split('.')[1]}</a>
+                :
+                'Unknown'
+              }
             </div>
             <FontAwesomeIcon
               icon={faGlobe}
