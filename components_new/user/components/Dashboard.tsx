@@ -62,7 +62,7 @@ const Dashboard = ({ data }: DashboardProps) => {
           data ?
           data.ERC_NFTS.map((data_, i) => {
             return <div className={`w-[20px] h-[20px] rounded-[50%] m-1 bg-[orangered]`} key={i}>
-              {data_.amount}
+              {/* {data_.amount} */}
             </div>
             })
           :
