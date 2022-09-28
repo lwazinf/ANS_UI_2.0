@@ -13,10 +13,10 @@ const Playground_ = () => {
       setSelection_(select(ref.current));
     } else {
       selection_
-      .append('rect')
-      .attr('width', 100)
-      .attr('height', 200)
-      .attr('fill', 'red')
+      .data(data.res.RSS3.transactions)
+      .attr('width', d => parseFloat(`${d.fee}`))
+      .attr('height', d => parseFloat(`${d.fee}`))
+      .attr('fill', 'blue')
     }
   }, [selection_])
 
