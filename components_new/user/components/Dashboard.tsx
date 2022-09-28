@@ -59,7 +59,14 @@ const Dashboard = ({ data }: DashboardProps) => {
           className={`w-full h-full absolute top-0 flex flex-row justify-center items-center`}
         >
          {
-          data?.POAPS.toString()
+          data ?
+          data.ERC_NFTS.map((data_, i) => {
+            return <div className={`w-[20px] h-[20px] rounded-[50%] m-1 bg-[orangered]`} key={i}>
+              {data_.amount}
+            </div>
+            })
+          :
+          <div>No Data Available</div>
          }
         </div>
 
