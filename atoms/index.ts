@@ -48,3 +48,8 @@ export const extendDash = atom<boolean>({
     key: 'extendDash',
     default: false,
 });
+
+export const currentANFT = atom<number>({
+    key: 'currentANFT',
+    default: -1,
+});

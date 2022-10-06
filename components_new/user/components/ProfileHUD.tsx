@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
-import { extendDash, isDarkMode } from "../../../atoms";
+import { extendDash, isDarkMode, currentANFT } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
@@ -23,8 +23,9 @@ interface ProfileHUDProps {
 const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [viewSwitch_, setViewSwitch_] = useState(true);
   const [viewQR_, setViewQR_] = useState(true);
-  const [isDark_, setIsDark_] = useState(false);
-  // const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
+  const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
+  // const [isDark_, setIsDark_] = useState(false);
+  const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
   const [dash_, setDash_] = useRecoilState(extendDash);
   return (
     <div
@@ -291,6 +292,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               ? "duration-[1000ms] opacity-30"
               : "duration-[1000ms] opacity-0"
           }`} onClick={() => {
+            setCurrentANFT_(-1)
             dash_ ?
             setDash_(false)
             :
@@ -304,7 +306,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           }
           </p>
 
-          <p className={`m-2 cursor-pointer hover:opacity-70 ${
+          {/* <p className={`m-2 cursor-pointer hover:opacity-70 ${
             viewSwitch_
               ? "duration-[1000ms] opacity-30"
               : "duration-[1000ms] opacity-0"
@@ -317,7 +319,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               :
               'Dark'
           }
-          </p>
+          </p> */}
         </div>
       </div>
 

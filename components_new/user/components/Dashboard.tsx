@@ -5,8 +5,9 @@ import { Res } from "../../../src/types";
 const Converter = require("timestamp-conv");
 // import d3 from "d3-scale";
 import d3 from "d3";
-import { extendDash } from "../../../atoms";
+import { extendDash, currentANFT } from "../../../atoms";
 import { useRecoilState } from "recoil";
+import Visuals from "../Visuals";
 
 interface DashboardProps {
   data: Res | undefined;
@@ -28,7 +29,7 @@ const months_ = {
 };
 
 const Dashboard = ({ data }: DashboardProps) => {
-  const [currentANFT_, setCurrentANFT_] = useState(-1);
+  const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
   const [viewDesc_, setViewDesc_] = useState(false);
   const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
   const [dash_, setDash_] = useRecoilState(extendDash);
@@ -37,6 +38,9 @@ const Dashboard = ({ data }: DashboardProps) => {
     <div
       className={`w-[912px] h-[420px] flex flex-row justify-center items-center mx-auto`}
     >
+
+      {/* Left Plate */}
+
       <div
         className={`h-[412px] ${dash_ ? 'w-[452px]' : 'w-full'} rounded-[4px] bg-[#e8e8e8] transition-all duration-200 overflow-hidden m-1 p-1 _container relative`}
       >
@@ -60,18 +64,14 @@ const Dashboard = ({ data }: DashboardProps) => {
         >
          {
           data ?
-          data.ERC_NFTS.map((data_, i) => {
-            return <div className={`w-[20px] h-[20px] rounded-[50%] m-1 bg-[orangered]`} key={i}>
-              {/* {data_.amount} */}
-            </div>
-            })
+          <Visuals data={data.RSS3.transactions}/>
           :
-          <div>No Data Available</div>
+          <div/>
          }
         </div>
 
         <div
-          className={`w-full h-[70px] flex flex-col justify-center items-center absolute bottom-0 left-0 ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+          className={`w-[452px] h-[70px] flex flex-col justify-center items-center absolute bottom-0 left-0 ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         >
           {currentANFT_ != -1 ? (
             <a
@@ -90,7 +90,7 @@ const Dashboard = ({ data }: DashboardProps) => {
             currentANFT_ != -1
               ? "top-0 duration-[800ms]"
               : "top-[-380px] duration-200"
-          } transition-all right-0 w-full h-[350px] shadow-md flex flex-col bg-[ghostwhite] justify-center items-center ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+          } transition-all left-0 w-[452px] h-[350px] shadow-md flex flex-col bg-[ghostwhite] justify-center items-center ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         >
           <div
             className={`w-full h-[60px] flex flex-row px-[20px] items-center`}
@@ -204,6 +204,8 @@ const Dashboard = ({ data }: DashboardProps) => {
         </div>
       </div>
       
+      {/* Right Plate */}
+
       <div
         className={`h-[412px] ${dash_ ? 'w-[457px] m-1 p-1' : 'w-0 m-0 p-0'} rounded-[4px] bg-[#e8e8e8] transition-all duration-200 _container _grid`}
       >
