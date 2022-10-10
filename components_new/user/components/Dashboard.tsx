@@ -5,7 +5,7 @@ import { Res } from "../../../src/types";
 const Converter = require("timestamp-conv");
 // import d3 from "d3-scale";
 import d3 from "d3";
-import { extendDash, currentANFT } from "../../../atoms";
+import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
 import Visuals from "../Visuals";
 
@@ -34,6 +34,9 @@ const Dashboard = ({ data }: DashboardProps) => {
   const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
   const [dash_, setDash_] = useRecoilState(extendDash);
 
+    // Everything on this element is Light/Dark theme ready..
+    const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
+
   return (
     <div
       className={`w-[912px] h-[420px] flex flex-row justify-center items-center mx-auto`}
@@ -42,7 +45,7 @@ const Dashboard = ({ data }: DashboardProps) => {
       {/* Left Plate */}
 
       <div
-        className={`h-[412px] ${dash_ ? 'w-[452px]' : 'w-full'} rounded-[4px] bg-[#e8e8e8] transition-all duration-200 overflow-hidden m-1 p-1 _container relative`}
+        className={`h-[412px] ${dash_ ? 'w-[452px]' : 'w-full'} rounded-[4px] ${isDark_ ? "bg-[#0f1729]" : "bg-[#e8e8e8]"} transition-all duration-200 overflow-hidden m-1 p-1 _container relative`}
       >
         <img
           src={`${
@@ -56,20 +59,21 @@ const Dashboard = ({ data }: DashboardProps) => {
         />
 
         <div
-          className={`backdrop-blur-xl bg-white/30 h-full w-full absolute top-0 left-0`}
+          className={`backdrop-blur-xl ${isDark_ ? "bg-[#0f1729]/30" : "bg-white/30"} h-full w-full absolute top-0 left-0`}
         />
 
         <div
           className={`w-full h-full absolute top-0 flex flex-row justify-center items-center`}
         >
-         {
+         {/* {
           data ?
           <Visuals data={data.RSS3.transactions}/>
           :
           <div/>
-         }
+         } */}
         </div>
 
+         {/* Hidden Info Panel */}
         <div
           className={`w-[452px] h-[70px] flex flex-col justify-center items-center absolute bottom-0 left-0 ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         >
@@ -77,7 +81,7 @@ const Dashboard = ({ data }: DashboardProps) => {
             <a
               href={`https://koi.rocks/content-detail/${data?.ANFTS.koii[currentANFT_].id}`}
             >
-              <p className={`text-[14px] text-black/30 font-thin`}>
+              <p className={`text-[14px] ${isDark_ ? 'text-white/30' : 'text-black/30'} font-thin`}>
                 View on Koii
               </p>
             </a>
@@ -90,7 +94,7 @@ const Dashboard = ({ data }: DashboardProps) => {
             currentANFT_ != -1
               ? "top-0 duration-[800ms]"
               : "top-[-380px] duration-200"
-          } transition-all left-0 w-[452px] h-[350px] shadow-md flex flex-col bg-[ghostwhite] justify-center items-center ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+          } transition-all left-0 w-[452px] h-[350px] shadow-md flex flex-col ${isDark_ ? 'bg-[#0f1729]' : 'bg-[ghostwhite]'} justify-center items-center ${dash_ ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         >
           <div
             className={`w-full h-[60px] flex flex-row px-[20px] items-center`}
@@ -115,12 +119,12 @@ const Dashboard = ({ data }: DashboardProps) => {
               {currentANFT_ != -1 ? (
                 <div className={``}>
                   <p
-                    className={`font-semibold text-black/80 text-[15px] w-[250px] truncate`}
+                    className={`font-semibold ${isDark_ ? 'text-white/80' : 'text-black/80'} text-[15px] w-[250px] truncate`}
                   >
                     {data?.ANFTS.koii[currentANFT_].title}
                   </p>
                   <div className={`h-[13px] flex flex-row`}>
-                    <p className={`font-thin text-black/40 text-[12px]`}>
+                    <p className={`font-thin ${isDark_ ? 'text-white/40' : 'text-black/40'} text-[12px]`}>
                       {`Acquired on ${new Converter.date(
                         data?.ANFTS.koii[currentANFT_].timestamp
                       ).getDay()} ${
@@ -137,7 +141,7 @@ const Dashboard = ({ data }: DashboardProps) => {
                       ).getYear()}`}
                     </p>
                     <p
-                      className={`ml-1 font-medium italic text-black/80 text-[12px]`}
+                      className={`ml-1 font-medium italic ${isDark_ ? 'text-white/80' : 'text-black/80'} text-[12px]`}
                     >
                       {"(" +
                         data?.ANFTS.koii[currentANFT_].poster.slice(0, 4) +
@@ -175,7 +179,7 @@ const Dashboard = ({ data }: DashboardProps) => {
               <div />
             )}
             <div
-              className={`backdrop-blur-xl bg-white/30 w-full h-full absolute top-0 left-0
+              className={`backdrop-blur-xl ${isDark_ ? 'bg-[#0f1729]/30' : 'bg-white/30'} w-full h-full absolute top-0 left-0
             ${
               viewDesc_
                 ? "duration-[200ms] opacity-100"
@@ -191,7 +195,7 @@ const Dashboard = ({ data }: DashboardProps) => {
             >
               {currentANFT_ != -1 ? (
                 <div
-                  className={`w-[320px] h-full text-center mx-auto font-black text-black/60 text-[15px] flex flex-col justify-center items-center`}
+                  className={`w-[320px] h-full text-center mx-auto font-black ${isDark_ ? 'text-white/60' : 'text-black/60'} text-[15px] flex flex-col justify-center items-center`}
                 >
                   {data?.ANFTS.koii[currentANFT_].description}
                 </div>
@@ -207,7 +211,7 @@ const Dashboard = ({ data }: DashboardProps) => {
       {/* Right Plate */}
 
       <div
-        className={`h-[412px] ${dash_ ? 'w-[457px] m-1 p-1' : 'w-0 m-0 p-0'} rounded-[4px] bg-[#e8e8e8] transition-all duration-200 _container _grid`}
+        className={`h-[412px] ${dash_ ? 'w-[457px] m-1 p-1' : 'w-0 m-0 p-0'} rounded-[4px] ${isDark_ ? "bg-[#0f1729]" : "bg-[#e8e8e8]"} transition-all duration-200 _container _grid`}
       >
         {data?.ANFTS.koii.map((nft, i) => {
           return (
