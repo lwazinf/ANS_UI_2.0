@@ -7,7 +7,6 @@ const Converter = require("timestamp-conv");
 import d3 from "d3";
 import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
-import Visuals from "../Visuals";
 
 interface DashboardProps {
   data: Res | undefined;
