@@ -133,7 +133,7 @@ const Visuals = ({ data }: VisualsProps) => {
         </div>
       </div>
       
-      <div className={`mb-4 ml-[-45px]`}>
+      <div className={`mb-4 ml-[-45px] w-[350px]`}>
         <Bar
           data={{
             labels: [...getData(currentData).keys()],
@@ -148,6 +148,24 @@ const Visuals = ({ data }: VisualsProps) => {
           innerStrokeWidth={0}
           className={`absolute top-4 left-4`}
         />
+      </div>
+
+      <div className={`w-[200px] h-full flex flex-col justify-center items-center
+      ${
+        isDark_
+          ? "text-white"
+          : "text-black"
+      } text-[35px] font-black`}>
+        {
+            currentData.charAt(0).toUpperCase()+currentData.slice(1)
+        }
+        <p className={`text-[13px] text-center ${
+                isDark_ ? "text-white/70" : "text-black"
+              } font-thin`}>
+                {
+                    currentData == 'network' ? 'Transactions according to network used..' : currentData == 'platform' ? 'Transactions according to platform used..' : currentData == 'tag' ? 'Transactions according to category..' : 'Transactions according to nature of transaction..'
+                }
+              </p>
       </div>
     </div>
   );
