@@ -1,12 +1,9 @@
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { Nfts } from "../../../components/Nfts";
+import { useState } from "react";
 import { Res } from "../../../src/types";
-const Converter = require("timestamp-conv");
-// import d3 from "d3-scale";
-import d3 from "d3";
 import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
+import Visuals from "../Visuals";
+const Converter = require("timestamp-conv");
 
 interface DashboardProps {
   data: Res | undefined;
@@ -64,12 +61,12 @@ const Dashboard = ({ data }: DashboardProps) => {
         <div
           className={`w-full h-full absolute top-0 flex flex-row justify-center items-center`}
         >
-         {/* {
+         {
           data ?
           <Visuals data={data.RSS3.transactions}/>
           :
           <div/>
-         } */}
+         }
         </div>
 
          {/* Hidden Info Panel */}

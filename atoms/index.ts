@@ -46,7 +46,7 @@ export const userInfoState = atom<userInfo | null>({
 // Dashboard control
 export const extendDash = atom<boolean>({
     key: 'extendDash',
-    default: false,
+    default: true,
 });
 
 export const currentANFT = atom<number>({
