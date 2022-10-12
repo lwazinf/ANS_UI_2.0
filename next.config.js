@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   // swcMinify: true,
   images: {
     domains: ['pz-prepnb.meson.network', 'arweave.net', 'assets.poap.xyz', 'cryptologos.cc'],
