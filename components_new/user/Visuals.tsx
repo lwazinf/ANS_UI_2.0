@@ -1,7 +1,8 @@
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faBoxesStacked, faCoins, faTag, faTowerBroadcast } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { select } from "d3-selection";
+import { createRef, useEffect, useRef, useState } from "react";
 import { Bar, Pie } from "react-roughviz";
 import { useRecoilState } from "recoil";
 import { isDarkMode } from "../../atoms";
@@ -15,32 +16,55 @@ const Visuals = ({ data }: VisualsProps) => {
   // Everything on this element is Light/Dark theme ready..
   const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
 
-  const getData = (userInput: any) => {
-    let platform_ = [];
-    data.forEach((element) => {
-      platform_.push(element[userInput]);
-    });
-    platform_ = [...new Set(platform_)];
-    let platformObj = new Map();
-    platform_.forEach((data__) => {
-      platformObj.set(data__, 0);
-    });
-    data.forEach((element) => {
-      platformObj.set(
-        element[userInput],
-        platformObj.get(element[userInput]) + 1
-      );
-    });
+//   const getData = (userInput: any) => {
+    // let platform_ = [];
+    // data.forEach((element) => {
+    //   platform_.push(element[userInput]);
+    // });
+    // platform_ = [...new Set(platform_)];
+    // let platformObj = new Map();
+    // platform_.forEach((data__) => {
+    //   platformObj.set(data__, 0);
+    // });
+    // data.forEach((element) => {
+    //   platformObj.set(
+    //     element[userInput],
+    //     platformObj.get(element[userInput]) + 1
+    //   );
+    // });
 
-    return platformObj;
-  };
-
+//     return platformObj;
+//   };
+const svgRef = createRef<HTMLDivElement>()
+    let w = 500;
+    let h = 400;
+    useEffect(() => {
+        let refAccess = select(svgRef.current)
+        .append('svg')
+        .attr('width', w)
+        .attr('height', h)
+        .style('background-color', '#cccccc')
+        .style('padding', 10)
+        .style('margin-left', 50);
+        
+        refAccess.selectAll('rect')
+        .data([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
+        .enter()
+        .append('rect')
+        .attr('x', (d, i) => i*70)
+        .attr('y', (d, i) => h - 10*d)
+        .attr('width', 65)
+        .attr('height', (d, i) => d*10)
+        .attr('fill', 'lime')
+    })
   return (
     <div
       className={`w-full h-full flex flex-row justify-center items-center relative overflow-hidden`}
       onClick={() => {}}
     >
-      <div className={`w-[100px] h-full flex flex-col justify-center items-end`} onClick={() => {}}>
+
+        <div ref={svgRef}>Testing</div>
+      {/* <div className={`w-[100px] h-full flex flex-col justify-center items-end`} onClick={() => {}}>
         <div
           className={`${currentData == 'tag' ? 'w-[90px]' : 'w-[20px] hover:w-[120px]'} cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
         >
@@ -166,7 +190,7 @@ const Visuals = ({ data }: VisualsProps) => {
                     currentData == 'network' ? 'Transactions according to network used..' : currentData == 'platform' ? 'Transactions according to platform used..' : currentData == 'tag' ? 'Transactions according to category..' : 'Transactions according to nature of transaction..'
                 }
               </p>
-      </div>
+      </div> */}
     </div>
   );
 };
