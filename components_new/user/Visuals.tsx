@@ -1,13 +1,17 @@
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faBoxesStacked, faCoins, faTag, faTowerBroadcast } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxesStacked,
+  faCoins,
+  faTag,
+  faTowerBroadcast,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { select } from "d3-selection";
 import { createRef, useEffect, useRef, useState } from "react";
 import { Bar, Pie } from "react-roughviz";
 import { useRecoilState } from "recoil";
 import { isDarkMode } from "../../atoms";
-import * as d3 from 'd3'
-
+import * as d3 from "d3";
 
 interface VisualsProps {
   data: any;
@@ -18,63 +22,86 @@ const Visuals = ({ data }: VisualsProps) => {
   // Everything on this element is Light/Dark theme ready..
   const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
 
-//   const getData = (userInput: any) => {
-    // let platform_ = [];
-    // data.forEach((element) => {
-    //   platform_.push(element[userInput]);
-    // });
-    // platform_ = [...new Set(platform_)];
-    // let platformObj = new Map();
-    // platform_.forEach((data__) => {
-    //   platformObj.set(data__, 0);
-    // });
-    // data.forEach((element) => {
-    //   platformObj.set(
-    //     element[userInput],
-    //     platformObj.get(element[userInput]) + 1
-    //   );
-    // });
+  const getData = (userInput: any) => {
+    let platform_ = [];
+    data.forEach((element) => {
+      platform_.push(element[userInput]);
+    });
+    platform_ = [...new Set(platform_)];
+    let platformObj = new Map();
+    platform_.forEach((data__) => {
+      platformObj.set(data__, 0);
+    });
+    data.forEach((element) => {
+      platformObj.set(
+        element[userInput],
+        platformObj.get(element[userInput]) + 1
+      );
+    });
 
-//     return platformObj;
-//   };
+    return platformObj;
+  };
 
-var data__ = [
-    {source:"Item 1", x: 100, y: 60, val: 1350, color: "#C9D6DF"},
-    {source:"Item 2", x: 30, y: 80, val: 2500, color: "#F7EECF"},
-    {source:"Item 3", x: 50, y: 40, val: 5700, color: "#E3E1B2"},
-    {source:"Item 4", x: 190, y: 100, val: 30000, color: "#F9CAC8"},
-    {source:"Item 5", x: 80, y: 170, val: 47500, color: "#D1C2E0"}
-  ]
+  const svgRef = createRef<HTMLDivElement>();
 
-const svgRef = createRef<HTMLDivElement>()
+  let w = 700;
+  let h = 400;
 
-    let w = 700;
-    let h = 400;
+  let z = data.map((obj) => {
+    return !isNaN(parseFloat(obj.fee)) ? parseFloat(obj.fee)*25 : 0
+  })
+
+  useEffect(() => {
+    const simulation = d3.forceSimulation()
+    .force('x', d3.forceX().strength(0.005))
+    .force('y', d3.forceX().strength(0.005))
+    .force('collide', d3.forceCollide((d) => {
+      return radiusScale(parseFloat(d.fee)*10000 + 1.5)
+    }))
     
-    useEffect(() => {
-        const refAccess = 
-        select(svgRef.current).append('svg').attr("width", 700)
-        .attr("height", 400);
-        
-        refAccess.selectAll("circle")
-        .data(data).enter()
-        .append("circle")
-        .attr("cx", (d) => parseFloat(d.fee)*10000*Math.random())
-        .attr("cy", (d) => parseFloat(d.fee)*10000*Math.random())
-        .attr("r", function(d) {
-          return Math.sqrt(parseFloat(d.fee)*35500)/Math.PI 
-        })
-        .attr("fill", function(d) {
-          return 'ghostwhite';
-        });
-    }, [])
+    const refAccess = select(svgRef.current)
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .append("g")
+      .attr("transform", `translate(${w/2},${h/2})`);
+
+    let radiusScale = d3.scaleSqrt().domain([Math.min(...z.filter(Number)), Math.max(...z.filter(Number))]).range([2, 6])
+
+    let circles = refAccess
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("r", (d) => {
+        return radiusScale(parseFloat(d.fee)*10000)
+      })
+      .attr("fill", (d) => {
+        return d.network == 'ethereum' ? 'blue' : d.network == 'polygon' ? 'red' : 'white'
+      });
+
+    const ticked = () => {
+      circles.attr("cx", (d) => {
+        return d.x;
+      }).attr("cy", (d) => {
+        return d.y + 1;
+      });
+    };
+
+    simulation.nodes(data)
+    .on('tick', ticked);
+  }, []);
+
   return (
+
     <div
-      className={`w-full h-full flex flex-row justify-center items-center relative overflow-hidden`}
+      className={`w-[700px] h-[400px] flex flex-row justify-center items-center relative overflow-hidden`}
       onClick={() => {}}
     >
-
-        <div className={`w-[700px] h-[400px] flex flex-col justify-center items-center`} ref={svgRef} id={`mainDiv`}></div>
+      <div
+        className={`flex flex-row justify-center items-center`}
+        ref={svgRef}
+      ></div>
       {/* <div className={`w-[100px] h-full flex flex-col justify-center items-end`} onClick={() => {}}>
         <div
           className={`${currentData == 'tag' ? 'w-[90px]' : 'w-[20px] hover:w-[120px]'} cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}

@@ -59,7 +59,7 @@ const Dashboard = ({ data }: DashboardProps) => {
         />
 
         <div
-          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${dash_ ? 'opacity-0 left-[-120px]' : 'opacity-100 left-[0px]'}`}
+          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${dash_ ? 'opacity-100 left-[0px]' : 'opacity-100 left-[0px]'}`}
         >
          {
           data ?
