@@ -22,11 +22,48 @@ interface VisualsProps {
 const Visuals = ({ data }: VisualsProps) => {
   const [currentData, setCurrentData] = useState("tag");
 
+  const [pieData0, setPieData0] = useState(0);
+  const [pieData1, setPieData1] = useState("");
+
   // Everything on this element is Light/Dark theme ready..
   const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
 
   // Clicking "assets/Transactions" reveals one of two dashboard views.. Dash is the Recoil atom which changes the ui
   const [dash_, setDash_] = useRecoilState(extendDash);
+
+  const tag_ = {
+    collectible: "blue",
+    transaction: "lightblue",
+    exchange: "gray",
+    social: "white",
+    governance: "yellow",
+  };
+  const network_ = {
+    ethereum: "yellow",
+    xdai: "lightblue",
+    polygon: "brown",
+    binance_smart_chain: "slategrey",
+  };
+  const type_ = {
+    transfer: "pink",
+    mint: "green",
+    swap: "gray",
+    poap: "slategrey",
+    trade: "lightblue",
+    post: "purple",
+    profile: "orangered",
+    vote: "red",
+  };
+  const platform_ = {
+    poap: "purple",
+    Snapshot: "orangered",
+    OpenSea: "blue",
+    MetaMask: "lightblue",
+    Uniswap: "gray",
+    SushiSwap: "white",
+    Lens: "red",
+    undefined: "orange",
+  };
 
   const svgRef0 = createRef<HTMLDivElement>();
   let w0 = 902;
@@ -84,6 +121,13 @@ const Visuals = ({ data }: VisualsProps) => {
         });
     };
 
+    var tooltip = d3
+      .select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden");
+
     // First Chart
 
     const refAccess0 = select(svgRef0.current)
@@ -104,7 +148,8 @@ const Visuals = ({ data }: VisualsProps) => {
       .data(data)
       .enter()
       .append("circle")
-      .attr("opacity", 0.8)
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
       .attr("r", (d) => {
         return radiusScale(parseFloat(d.fee) * 8000);
       })
@@ -123,6 +168,26 @@ const Visuals = ({ data }: VisualsProps) => {
         drag().on("start", dragstarted).on("drag", dragged).on("end", dragended)
       );
 
+    circles
+      .on("mouseenter", function (d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .style("opacity", "1")
+          .attr("r", (d) => {
+            return radiusScale(parseFloat(d.fee) * 7000);
+          });
+      })
+      .on("mouseleave", function (d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .style("opacity", "0.6")
+          .attr("r", (d) => {
+            return radiusScale(parseFloat(d.fee) * 8000);
+          });
+      });
+
     function dragstarted(event, node) {
       if (!event.active) simulation.alphaTarget(1).restart();
       (node.fx = node.x), (node.fy = node.y);
@@ -137,121 +202,114 @@ const Visuals = ({ data }: VisualsProps) => {
       (node.fx = null), (node.fy = null);
     }
 
+    // Second Chart
+
+    var radius = Math.min(w1, h1) / 2.2;
+
+    const getMap = () => {
+      let keys_ = [...getData(currentData).keys()];
+      let values_ = [...getData(currentData).values()];
+
+      let result_ = new Map();
+      if (keys_.length == values_.length) {
+        keys_.forEach((item, index, arr) => {
+          result_.set(item, values_[index]);
+        });
+      } else {
+        return 0;
+      }
+      return result_;
+    };
+
+    var pie = d3
+      .pie()
+      .padAngle(0.05)
+      .value((d) => d[1])(getMap());
+
+    var arc0 = d3
+      .arc()
+      .innerRadius(radius * 0.4)
+      .outerRadius(radius * 0.7);
+
+    var arc1 = d3
+      .arc()
+      .innerRadius(radius * 0.4 + 5)
+      .outerRadius(radius * 0.7 + 5);
+
+    const refAccess1 = select(svgRef1.current)
+      .append("svg")
+      .attr("width", w1)
+      .attr("height", h1)
+      .append("g")
+      .attr("transform", `translate(${w1 / 2}, ${h1 / 2})`);
+
+    var pieChart = refAccess1
+      .append("g")
+      .selectAll("path")
+      .data(pie)
+      .join("path")
+      .attr("d", arc0)
+      .attr("fill", (d, i) => {
+        return tag_[d.data[0]];
+      })
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
+      .on("mouseenter", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(100)
+          .style("opacity", "1")
+          .attr("d", arc1);
+
+        tooltip.style("visibility", "visible");
+        setPieData0(i.data[1]);
+        setPieData1(i.data[0]);
+
+        console.log(d);
+        console.log(i.data[0]);
+      })
+      .on("mousemove", function (d, i) {
+        tooltip
+          .style("top", d.pageY - 30 + "px")
+          .style("left", d.pageX + 30 + "px");
+      })
+      .on("mouseleave", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(800)
+          .style("opacity", "0.6")
+          .attr("d", arc0);
+
+        tooltip.style("visibility", "hidden");
+        setPieData0(0);
+        setPieData1("");
+      });
+
+    // User Inputs
+
     d3.select("#type_").on("click", () => {
       circles.attr("fill", (d) => {
-        return d.type == "mint"
-          ? "green"
-          : d.type == "transfer"
-          ? "pink"
-          : d.type == "swap"
-          ? "gray"
-          : d.type == "vote"
-          ? "red"
-          : d.type == "poap"
-          ? "slategrey"
-          : d.type == "social"
-          ? "orange"
-          : d.type == "trade"
-          ? "lightblue"
-          : d.type == "post"
-          ? "purple"
-          : d.type == "vote"
-          ? "orangered"
-          : "white";
+        return type_[d.type];
       });
     });
 
     d3.select("#tag_").on("click", () => {
       circles.attr("fill", (d) => {
-        return d.tag == "collectible"
-          ? "blue"
-          : d.tag == "transaction"
-          ? "lightblue"
-          : d.tag == "exchange"
-          ? "gray"
-          : d.tag == "social"
-          ? "white"
-          : "yellow";
+        return tag_[d.tag];
       });
     });
 
     d3.select("#network_").on("click", () => {
       circles.attr("fill", (d) => {
-        return d.network == "ethereum"
-          ? "yellow"
-          : d.network == "polygon"
-          ? "lightblue"
-          : d.network == "xdai"
-          ? "brown"
-          : "slategrey";
+        return network_[d.network];
       });
     });
 
     d3.select("#platform_").on("click", () => {
       circles.attr("fill", (d) => {
-        return d.platform == "OpenSea"
-          ? "blue"
-          : d.platform == "MetaMask"
-          ? "lightblue"
-          : d.platform == "Uniswap"
-          ? "gray"
-          : d.platform == "SushiSwap"
-          ? "white"
-          : d.platform == "Lens"
-          ? "red"
-          : "orange";
+        return platform_[d.platform];
       });
     });
-
-    // Second Chart
-
-    var radius = Math.min(w1, h1) / 2.2;
-
-    var pie = d3
-      .pie()
-      .value((d) => d)([...getData(currentData).values()]);
-
-      var arc = d3.arc()
-      .innerRadius(radius * 0.4)
-      .outerRadius(radius * 0.7);
-    
-      var color = d3.interpolateGreys(.5)
-
-      const refAccess1 = select(svgRef1.current)
-      .append("svg")
-      .attr("width", w1)
-      .attr("height", h1)
-      .append("g") 
-      .attr("transform", `translate(${w1 / 2}, ${h1 / 2})`)
-
-      const tooltip = d3.select(`#plateArea`)
-      .append('div')
-      .style('visibility', 'hidden')
-      .style('position', 'absolute')
-      .style('background-color', 'red')
-
-      refAccess1.append('g')
-      .selectAll('path')
-      .data(pie)
-      .join('path')
-      .attr('d', arc)
-      .attr('fill', (d, i) => color)
-      .attr('stroke', 'white')
-      .attr('opacity', '0.8')
-      .on('mouseover', (e, d) => {
-        console.log(e)
-        console.log(d)
-        tooltip.style('visibility', 'visible')
-        .text(`XY`)
-      })
-      .on('mousemove', (e, d) => {
-        tooltip.style('top', (e.pageY - 50) + 'px')
-        .style('left', (e.pageX - 50) + 'px')
-      })
-    
-    // refAccess1.attr("transform", "translate(" + w1 / 2 + "," + h1 / 2 + ")");
-
-    const pieLabels: any = [...getData(currentData).keys()];
 
     simulation.nodes(data).on("tick", ticked);
   }, []);
@@ -260,11 +318,13 @@ const Visuals = ({ data }: VisualsProps) => {
     <div
       className={`w-full h-full flex flex-row justify-start items-center relative overflow-hidden`}
       onClick={() => {}}
-      id={'plateArea'}
+      id={"plateArea"}
     >
       <div
         className={`flex flex-row justify-center items-center overflow-hidden relative ${
-          dash_ ? "w-[452px] duration-400 pl-[180px]" : "w-["+w0+"px] duration-200"
+          dash_
+            ? "w-[452px] duration-400 pl-[180px]"
+            : "w-[" + w0 + "px] duration-200"
         } transition-all`}
       >
         <div
@@ -406,10 +466,13 @@ const Visuals = ({ data }: VisualsProps) => {
         } transition-all duration-400`}
       >
         <p
+          onClick={() => {
+            console.log([...getData(currentData).keys()]);
+          }}
           className={`min-w-[20px] h-full flex flex-col mx-[10px] justify-center items-center
       ${
         isDark_ ? "text-white" : "text-black"
-      } _displayFont0 font-[700] text-right relative bottom-0 text-[35px] pointer-events-none`}
+      } _displayFont0 font-[700] text-right relative bottom-0 text-[35px] `}
         >
           {currentData.toUpperCase()}
         </p>
@@ -430,13 +493,28 @@ const Visuals = ({ data }: VisualsProps) => {
       </div>
 
       <div
+        className={`absolute top-[200px] right-[50px] flex flex-col ${
+          pieData0 == 0 ? "opacity-30 duration-800" : "opacity-80 duration-800"
+        } transition-all`}
+      >
+        <p
+          className={`text-[20px] w-[200px] ${
+            isDark_ ? "text-white/70" : "text-black"
+          } text-left pointer-events-none leading-[15px] _displayFont1 font-[600]`}
+        >
+          {pieData0}
+        </p>
+      </div>
+
+      <div
         className={`flex flex-col absolute right-[90px] top-0 ${
-          dash_ ? "opacity-0 duration-400 pointer-events-none" : "opacity-80 duration-[1500ms] pointer-events-auto"
+          dash_
+            ? "opacity-0 duration-400 pointer-events-none"
+            : "opacity-100 duration-[1500ms] pointer-events-auto"
         } transition-all`}
         onClick={() => {}}
         ref={svgRef1}
-      >
-      </div>
+      ></div>
     </div>
   );
 };
