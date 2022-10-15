@@ -35,14 +35,14 @@ const Dashboard = ({ data }: DashboardProps) => {
 
   return (
     <div
-      className={`w-[912px] h-[420px] flex flex-row justify-center items-center mx-auto`}
+      className={`w-[905px] h-[420px] relative pl-[2px] ${dash_ ? 'pr-[1px]' : 'pr-[0px]'} flex flex-row justify-center items-center mx-auto`}
     >
       {/* Left Plate */}
 
       <div
         className={`h-[412px] ${
           dash_ ? "w-[452px]" : "w-full"
-        } rounded-[4px] transition-all duration-200 overflow-hidden m-0 p-0 _container relative`}
+        } rounded-[4px] transition-all duration-200 overflow-hidden mr-[1px] p-0 _container relative`}
       >
         <img
           src={`${
@@ -241,7 +241,7 @@ const Dashboard = ({ data }: DashboardProps) => {
       <div
         className={`h-[412px] ${
           dash_ ? "w-[457px] m-1 p-1" : "w-0 m-0 p-0"
-        } transition-all rounded-[4px] relative`}
+        } transition-all rounded-[4px] relative left-1`}
       >
         <div
           className={`${
@@ -257,9 +257,9 @@ const Dashboard = ({ data }: DashboardProps) => {
                 key={nft.id}
                 className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all ${
                   currentANFT_ == i
-                    ? "opacity-100 duration-[500ms]"
-                    : "opacity-80 duration-[200ms]"
-                }`}
+                    ? "opacity-100 duration-[500ms] grayscale-0"
+                    : "opacity-60 duration-[200ms] grayscale-[70%]"
+                } hover:opacity-80`}
                 onClick={() => {
                   if (currentANFT_ == i) {
                     setCurrentANFT_(-1);
@@ -278,6 +278,9 @@ const Dashboard = ({ data }: DashboardProps) => {
             );
           })}
         </div>
+        {/* <div
+        className={`flex flex-row justify-center items-center w-full h-full bg-black/0 backdrop-blur-sm absolute bottom-0 opacity-30 pointer-events-none`}
+      /> */}
       </div>
     </div>
   );
