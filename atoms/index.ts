@@ -53,3 +53,8 @@ export const currentANFT = atom<number>({
     key: 'currentANFT',
     default: -1,
 });
+
+export const hudAux = atom<boolean>({
+    key: 'hudAux',
+    default: false,
+});

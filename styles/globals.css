@@ -38,13 +38,15 @@ html {
   }
 
   ._displayFont0 {
-    /* font-family: 'Coiny', cursive; */
-    /* font-family: 'Karantina', cursive; */
     font-family: 'Zilla Slab Highlight', cursive;
   }
 
   ._displayFont1 {
     font-family: 'Oswald', sans-serif;
+  }
+
+  ._displayFont2 {
+    font-family: 'Karantina', cursive;
   }
 
   ._filter {

@@ -10,7 +10,7 @@ import { select } from "d3-selection";
 import { createRef, useEffect, useRef, useState } from "react";
 import { Bar, Pie } from "react-roughviz";
 import { useRecoilState } from "recoil";
-import { extendDash, isDarkMode } from "../../atoms";
+import { extendDash, hudAux, isDarkMode } from "../../atoms";
 import * as d3 from "d3";
 import { drag } from "d3";
 import { values } from "lodash";
@@ -30,6 +30,8 @@ const Visuals = ({ data }: VisualsProps) => {
 
   // Clicking "assets/Transactions" reveals one of two dashboard views.. Dash is the Recoil atom which changes the ui
   const [dash_, setDash_] = useRecoilState(extendDash);
+    // Made to send dashboard control signal
+    const [hudAux_, setHudAux_] = useRecoilState(hudAux);
 
   const tag_ = {
     collectible: "blue",
@@ -73,18 +75,20 @@ const Visuals = ({ data }: VisualsProps) => {
   let w1 = 302;
   let h1 = 412;
 
+  var radius = Math.min(w1, h1) / 2.2;
+
   let z = data.map((obj) => {
     return !isNaN(parseFloat(obj.fee)) ? parseFloat(obj.fee) * 25 : 0;
   });
 
   const getData = (userInput: any) => {
-    let platform_ = [];
+    let platform__ = [];
     data.forEach((element) => {
-      platform_.push(element[userInput]);
+      platform__.push(element[userInput]);
     });
-    platform_ = [...new Set(platform_)];
+    platform__ = [...new Set(platform__)];
     let platformObj = new Map();
-    platform_.forEach((data__) => {
+    platform__.forEach((data__) => {
       platformObj.set(data__, 0);
     });
     data.forEach((element) => {
@@ -154,15 +158,7 @@ const Visuals = ({ data }: VisualsProps) => {
         return radiusScale(parseFloat(d.fee) * 8000);
       })
       .attr("fill", (d) => {
-        return d.tag == "collectible"
-          ? "blue"
-          : d.tag == "transaction"
-          ? "lightblue"
-          : d.tag == "exchange"
-          ? "gray"
-          : d.tag == "social"
-          ? "white"
-          : "yellow";
+        return tag_[d.tag]
       })
       .call(
         drag().on("start", dragstarted).on("drag", dragged).on("end", dragended)
@@ -202,13 +198,11 @@ const Visuals = ({ data }: VisualsProps) => {
       (node.fx = null), (node.fy = null);
     }
 
-    // Second Chart
+    // Second Chart // // // // // // // // // // // //
 
-    var radius = Math.min(w1, h1) / 2.2;
-
-    const getMap = () => {
-      let keys_ = [...getData(currentData).keys()];
-      let values_ = [...getData(currentData).values()];
+    const getMap = (_currentData) => {
+      let keys_ = [...getData(_currentData).keys()];
+      let values_ = [...getData(_currentData).values()];
 
       let result_ = new Map();
       if (keys_.length == values_.length) {
@@ -219,12 +213,13 @@ const Visuals = ({ data }: VisualsProps) => {
         return 0;
       }
       return result_;
-    };
+    }
 
-    var pie = d3
+          var pie = d3
       .pie()
       .padAngle(0.05)
-      .value((d) => d[1])(getMap());
+      .value((d) => d[1])
+      (getMap('tag'))
 
     var arc0 = d3
       .arc()
@@ -247,9 +242,100 @@ const Visuals = ({ data }: VisualsProps) => {
       .append("g")
       .selectAll("path")
       .data(pie)
-      .join("path")
-      .attr("d", arc0)
+      .enter()
+      .append("path")
+      
+      pieChart.attr("d", arc0)
       .attr("fill", (d, i) => {
+        return tag_[d.data[0]];
+      })
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
+      .on('click', function (d, i) {
+        setHudAux_(!hudAux_)
+      })
+      .on("mouseenter", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(100)
+          .style("opacity", "1")
+          .attr("d", arc1);
+
+        setPieData0(i.data[1]);
+        setPieData1(i.data[0]);
+      })
+      .on("mousemove", function (d, i) {
+      })
+      .on("mouseleave", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(800)
+          .style("opacity", "0.6")
+          .attr("d", arc0);
+
+        setPieData0(0);
+        setPieData1("");
+      });
+
+    // User Inputs
+
+    d3.select("#type_").on("click", () => {
+      setCurrentData('type')
+      
+      var pie = d3
+      .pie()
+      .padAngle(0.05)
+      .value((d) => d[1])(getMap('type'));
+
+      pieChart.data(pie).enter()
+      pieChart.exit().remove()
+      pieChart.attr("d", arc0)
+      pieChart.attr("fill", (d, i) => {
+        return type_[d.data[0]];
+      })
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
+      .on("mouseenter", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(100)
+          .style("opacity", "1")
+          .attr("d", arc1);
+
+        tooltip.style("visibility", "visible");
+        setPieData0(i.data[1]);
+        setPieData1(i.data[0]);
+      })
+      .on("mousemove", function (d, i) {
+        tooltip
+          .style("top", d.pageY - 30 + "px")
+          .style("left", d.pageX + 30 + "px");
+      })
+      .on("mouseleave", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(800)
+          .style("opacity", "0.6")
+          .attr("d", arc0);
+      });
+      
+      circles.attr("fill", (d) => {
+        return type_[d.type];
+      });
+    });
+
+    d3.select("#tag_").on("click", () => {
+      setCurrentData('tag')
+      
+      var pie = d3
+      .pie()
+      .padAngle(0.05)
+      .value((d) => d[1])(getMap('tag'));
+
+      pieChart.data(pie).enter()
+      pieChart.exit().remove()
+      pieChart.attr("d", arc0)
+      pieChart.attr("fill", (d, i) => {
         return tag_[d.data[0]];
       })
       .style("opacity", "0.6")
@@ -264,9 +350,6 @@ const Visuals = ({ data }: VisualsProps) => {
         tooltip.style("visibility", "visible");
         setPieData0(i.data[1]);
         setPieData1(i.data[0]);
-
-        console.log(d);
-        console.log(i.data[0]);
       })
       .on("mousemove", function (d, i) {
         tooltip
@@ -279,33 +362,99 @@ const Visuals = ({ data }: VisualsProps) => {
           .duration(800)
           .style("opacity", "0.6")
           .attr("d", arc0);
-
-        tooltip.style("visibility", "hidden");
-        setPieData0(0);
-        setPieData1("");
       });
 
-    // User Inputs
-
-    d3.select("#type_").on("click", () => {
-      circles.attr("fill", (d) => {
-        return type_[d.type];
-      });
-    });
-
-    d3.select("#tag_").on("click", () => {
       circles.attr("fill", (d) => {
         return tag_[d.tag];
       });
     });
 
     d3.select("#network_").on("click", () => {
+      setCurrentData('network')
+      
+      var pie = d3
+      .pie()
+      .padAngle(0.05)
+      .value((d) => d[1])(getMap('network'));
+
+      pieChart.data(pie).enter()
+      pieChart.exit().remove()
+      pieChart.attr("d", arc0)
+      pieChart.attr("fill", (d, i) => {
+        return network_[d.data[0]];
+      })
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
+      .on("mouseenter", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(100)
+          .style("opacity", "1")
+          .attr("d", arc1);
+
+        tooltip.style("visibility", "visible");
+        setPieData0(i.data[1]);
+        setPieData1(i.data[0]);
+      })
+      .on("mousemove", function (d, i) {
+        tooltip
+          .style("top", d.pageY - 30 + "px")
+          .style("left", d.pageX + 30 + "px");
+      })
+      .on("mouseleave", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(800)
+          .style("opacity", "0.6")
+          .attr("d", arc0);
+      });
+
       circles.attr("fill", (d) => {
         return network_[d.network];
       });
     });
 
     d3.select("#platform_").on("click", () => {
+      setCurrentData('platform')
+
+      var pie = d3
+      .pie()
+      .padAngle(0.05)
+      .value((d) => d[1])(getMap('platform'));
+
+
+      pieChart.data(pie).enter()
+      pieChart.exit().remove()
+      pieChart.attr("d", arc0)
+      pieChart.attr("fill", (d, i) => {
+        return platform_[d.data[0]];
+      })
+      .style("opacity", "0.6")
+      .style("cursor", "pointer")
+      .on("mouseenter", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(100)
+          .style("opacity", "1")
+          .attr("d", arc1);
+
+        tooltip.style("visibility", "visible");
+        setPieData0(i.data[1]);
+        setPieData1(i.data[0]);
+      })
+      .on("mousemove", function (d, i) {
+        tooltip
+          .style("top", d.pageY - 30 + "px")
+          .style("left", d.pageX + 30 + "px");
+      })
+      .on("mouseleave", function (d, i) {
+        d3.select(this)
+          .transition()
+          .duration(800)
+          .style("opacity", "0.6")
+          .attr("d", arc0);
+      });
+
       circles.attr("fill", (d) => {
         return platform_[d.platform];
       });
@@ -493,16 +642,27 @@ const Visuals = ({ data }: VisualsProps) => {
       </div>
 
       <div
-        className={`absolute top-[200px] right-[50px] flex flex-col ${
-          pieData0 == 0 ? "opacity-30 duration-800" : "opacity-80 duration-800"
+        className={`absolute top-[195px] right-[140px] flex flex-col ${
+          dash_
+            ? "opacity-0 duration-400 pointer-events-none"
+            : "opacity-100 duration-[1500ms] pointer-events-auto"
         } transition-all`}
       >
         <p
           className={`text-[20px] w-[200px] ${
             isDark_ ? "text-white/70" : "text-black"
-          } text-left pointer-events-none leading-[15px] _displayFont1 font-[600]`}
+          } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
+            pieData0 == 0 ? "opacity-30 duration-200" : "opacity-80 duration-800"
+          }`}
         >
           {pieData0}
+        </p>
+        <p
+          className={`text-[17px] min-w-[200px] relative top-[5px] ${
+            isDark_ ? "text-white/70" : "text-black"
+          } text-center pointer-events-none leading-[15px] _displayFont1 font-[200] opacity-60`}
+        >
+          {pieData1}
         </p>
       </div>
 

@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
-import { extendDash, isDarkMode, currentANFT } from "../../../atoms";
+import { extendDash, isDarkMode, currentANFT, hudAux } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
@@ -28,6 +28,8 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [dash_, setDash_] = useRecoilState(extendDash);
   // The currentANFT_ Recoil atom uses this variable to reset the dashboard's UI
   const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
+    // Made to recieve dashboard control signal
+    const [hudAux_, setHudAux_] = useRecoilState(hudAux);
 
   // Everything on this element is Light/Dark theme ready..
   const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
@@ -143,7 +145,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       
       {/* Main Control Area */}
       <div
-        className={`w-full h-full absolute top-0 pl-[245px] flex flex-row justify-center items-center`}
+        className={`w-full h-full absolute ${hudAux_ ? 'opacity-0 duration-400' : 'opacity-100 duration-400'} top-0 pl-[245px] flex flex-row justify-center items-center transition-all`}
       >
         
         {/* Socials & External Links */}
