@@ -58,3 +58,8 @@ export const hudAux = atom<boolean>({
     key: 'hudAux',
     default: false,
 });
+
+export const hoverData = atom({
+    key: 'hoverData',
+    default: ['', 0],
+});

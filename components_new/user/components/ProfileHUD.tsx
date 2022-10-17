@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useRecoilState } from "recoil";
-import { extendDash, isDarkMode, currentANFT, hudAux } from "../../../atoms";
+import { extendDash, isDarkMode, currentANFT, hudAux, hoverData } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 
@@ -26,8 +26,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
   // Clicking "assets/Transactions" reveals one of two dashboard views.. Dash is the Recoil atom which changes the ui
   const [dash_, setDash_] = useRecoilState(extendDash);
+
   // The currentANFT_ Recoil atom uses this variable to reset the dashboard's UI
   const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
+
     // Made to recieve dashboard control signal
     const [hudAux_, setHudAux_] = useRecoilState(hudAux);
 
@@ -36,6 +38,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
   // Used by the "Expand" fontAwesome icon, clears the HUD
   const [viewSwitch_, setViewSwitch_] = useState(true);
+
+  // Storing hover element data..
+  const [hoverData_, setHoverData_] = useRecoilState(hoverData);
 
   return (
     <div
@@ -74,8 +79,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       />
 
       {/* Arweave Logo */}
+      <a href={`https://arwiki.wiki/#/en/category/the_arweave_project`} target={"_blank"}
+                  rel={"noreferrer"} className={`absolute top-[-10px] left-[10px] z-5`}>
       <img
-        className={`w-[100px] h-[100px] rotate-[20deg] object-cover absolute top-[-10px] left-[10px] ${
+        className={`w-[100px] h-[100px] rotate-[20deg] object-cover ${
           isDark_ ? "invert" : "invert-0"
         } ${
           viewSwitch_
@@ -84,6 +91,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         } transition-all`}
         src={`/ProfileHUD/ar_logo.png`}
       />
+      </a>
 
       {/* BackDrop Layer */}
       <div className={`w-full h-full absolute top-0 p-[15px]`}>
@@ -125,27 +133,43 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         >
           <div
             className={`transition-all duration-[200ms] min-w-[50px] h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
-        ${!viewSwitch_ ? "opacity-0" : "opacity-100"}`}
+        ${!viewSwitch_ ? "opacity-0" : "opacity-100"} relative`}
           >
+            <div className={`${hoverData_[0] == '' ? 'opacity-100 bottom-[0px] duration-[1000ms]' : 'opacity-0 bottom-[20px] duration-[400ms]'} relative transition-all`}>
             <p
               className={`cursor-pointer ${
                 isDark_ ? "text-white" : "text-black"
-              } text-[15px] font-black transition-all duration-300 hover:opacity-100 ${
+              } font-black transition-all duration-300 hover:opacity-100 ${
                 viewSwitch_
-                  ? "duration-[1500ms] opacity-100"
+                  ? "duration-[1000ms] opacity-100"
                   : "duration-[100ms] opacity-70"
-              }`}
+              } ${ hoverData_[0] == '' ? 'text-[14px]' : 'text-[12px]'}`}
             >
               {data ? data.ANS.nickname.toUpperCase() : ""}
             </p>
+            </div>
+            <div className={`w-full h-full ${hoverData_[0] != '' ? 'opacity-100 pt-[0px] duration-[2000ms]' : 'opacity-0 pt-[20px] duration-[1400ms]'} absolute top-0 left-0 flex flex-col justify-center items-center`}>
+            <p
+              className={`cursor-pointer ${hoverData_[0] != '' ? 'text-[15px]' : 'text-[13px]'} ${
+                isDark_ ? "text-white" : "text-black"
+              } absolute font-black transition-all duration-300 hover:opacity-100 ${
+                viewSwitch_
+                  ? "duration-[400ms] opacity-100"
+                  : "duration-[100ms] opacity-70"
+              }`}
+            >
+              {hoverData_[0].toUpperCase()}
+            </p>
+              </div>
           </div>
         </div>
 
       </div>
       
       {/* Main Control Area */}
+      <div className={`w-full h-full absolute top-0 flex flex-row justify-center items-center  ${hudAux_ ? 'opacity-0 duration-[400ms]' : 'opacity-100 duration-[1000ms]'} transition-all`}>
       <div
-        className={`w-full h-full absolute ${hudAux_ ? 'opacity-0 duration-400' : 'opacity-100 duration-400'} top-0 pl-[245px] flex flex-row justify-center items-center transition-all`}
+        className={`w-full h-full absolute top-0 pl-[245px] flex flex-row justify-center items-center transition-all`}
       >
         
         {/* Socials & External Links */}
@@ -356,15 +380,17 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         </div>
 
       </div>
+      </div>
 
       <div
         className={`absolute bottom-4 w-full h-[15px] flex flex-row justify-center items-center`}
       >
         {/* User's Address */}
-        <p
+        <div className={`${hudAux_ ? 'duration-[400ms]' : 'duration-[1000ms]'} transition-all`}>
+          <p
           className={`cursor-pointer ${
             isDark_ ? "text-white" : "text-black"
-          } text-[12px] font-thin transition-all duration-300 hover:opacity-70 ${
+          } text-[12px] font-thin transition-all hover:opacity-70 ${
             viewSwitch_
               ? "duration-[1000ms] opacity-30"
               : "duration-[1000ms] opacity-0"
@@ -373,6 +399,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         >
           {data ? data.arweave_address : ""}
         </p>
+        </div>
 
         <div
           className={`cursor-pointer ${
@@ -430,7 +457,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
       </div> */}
     </div>
-  );
+  )
 };
 
 export default ProfileHUD;
