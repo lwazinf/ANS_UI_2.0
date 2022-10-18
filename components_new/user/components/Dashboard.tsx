@@ -56,18 +56,18 @@ const Dashboard = ({ data }: DashboardProps) => {
           } `}
         />
 
-        <d
+        <div
           className={`${isDark_ ? "invert" : "invert-0"} scale-[-1] h-[412px] ${
             dash_ ? "w-[452px]" : "w-full"
           } absolute left-0 top-0 _filter opacity-20 transition-all`}
         />
 
         <div
-          className={`w-full h-full absolute z-10 top-0 flex flex-row justify-center items-center transition-all duration-400`}
+          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400`}
         >
-          {/* {data ? <Visuals data={data.RSS3.transactions} /> : <div />} */}
-          {data ? <svg width={500} height={500}>
-      <DynamicChart_ data={data.RSS3.transactions} x={250} y={250}/>
+          {data ? <Visuals data={data.RSS3.transactions} /> : <div />}
+          {data ? <svg width={200} height={200} className={`absolute right-[140px] top-[110px]`}>
+      <DynamicChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
     </svg> : <div />}
         </div>
 
