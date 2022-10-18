@@ -63,3 +63,8 @@ export const hoverData = atom({
     key: 'hoverData',
     default: ['', 0],
 });
+
+export const currentState = atom({
+    key: 'currentState',
+    default: 'tag',
+});

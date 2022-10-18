@@ -145,8 +145,8 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`${
                 hoverData_[0] == ""
-                  ? "opacity-100 bottom-[0px] duration-[1400ms]"
-                  : "opacity-0 bottom-[5px] duration-[400ms]"
+                  ? "opacity-100 bottom-[0px] duration-[600ms]"
+                  : "opacity-0 bottom-[-2px] duration-[400ms]"
               } relative transition-all`}
             >
               <p
@@ -161,6 +161,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 {data ? data.ANS.nickname.toUpperCase() : ""}
               </p>
             </div>
+
             <div
               className={`w-full h-full ${
                 hoverData_[0] != ""
@@ -203,7 +204,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             onClick={() => {}}
           >
             <div
-              className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'}`}
+              className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden ${
+                hoverData_[0] == "" ? "opacity-100" : "opacity-80"
+              }`}
             >
               <div
                 className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${
@@ -232,7 +235,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               />
             </div>
             <div
-              className={`w-[20px] hover:w-[120px] cursor-default duration-[200ms] transition-all ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'} my-[4px] flex flex-row relative overflow-hidden`}
+              className={`w-[20px] hover:w-[120px] cursor-default duration-[200ms] transition-all ${
+                hoverData_[0] == "" ? "opacity-100" : "opacity-80"
+              } my-[4px] flex flex-row relative overflow-hidden`}
             >
               <div
                 className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${
@@ -251,7 +256,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               />
             </div>
             <div
-              className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'} transition-all my-[4px] flex flex-row relative overflow-hidden`}
+              className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] ${
+                hoverData_[0] == "" ? "opacity-100" : "opacity-80"
+              } transition-all my-[4px] flex flex-row relative overflow-hidden`}
             >
               <div
                 className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${
@@ -280,7 +287,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               />
             </div>
             <div
-              className={`w-[20px] hover:w-[120px] ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'} cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
+              className={`w-[20px] hover:w-[120px] ${
+                hoverData_[0] == "" ? "opacity-100" : "opacity-80"
+              } cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
             >
               <div
                 className={`w-[120px] h-full absolute left-0 pl-[30px] font-medium text-[13px] ${
@@ -313,8 +322,8 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           {/* Profile Picture & QR Code */}
           <div
             className={`${
-              hoverData_[0] != ''
-                ? "top-[2px] duration-[400ms]"
+              hoverData_[0] != ""
+                ? "top-[0px] duration-[800ms]"
                 : "top-[0px] duration-[200ms]"
             } transition-all relative`}
           >
@@ -397,11 +406,17 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 <p
                   className={`text-[35px] ${
                     isDark_ ? "text-white" : "text-black"
-                  } font-black mt-[-10px] transition-all duration-200 ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'}`}
+                  } font-black mt-[-10px] transition-all duration-200 ${
+                    hoverData_[0] == "" ? "opacity-100" : "opacity-100"
+                  }`}
                 >
                   {data ? data.ANS.currentLabel.toUpperCase() : ""}
                 </p>
-                <div className={`ml-[-5px] transition-all duration-200 ${hoverData_[0] == '' ? 'opacity-100' : 'opacity-80'}`}>
+                <div
+                  className={`ml-[-5px] transition-all duration-200 ${
+                    hoverData_[0] == "" ? "opacity-100" : "opacity-100"
+                  }`}
+                >
                   <ProfileBadge
                     loading={false}
                     is_evaluated={data?.is_evaluated}
@@ -409,11 +424,6 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                     isDark={false}
                   />
                 </div>
-              </div>
-              <div className={`${hoverData_[0] == "" ? 'top-0 duration-[0ms] opacity-0' : 'top-0 duration-[1400ms] opacity-100'} relative transition-all`}>
-              <p className={`text-white/60 font-bold p-0 my-[-10px] ${hoverData_[0] == "" ? 'opacity-0 duration-[200ms]' : 'opacity-100 duration-[600ms]'} text-[12px] transition-all`}>
-                {hoverData_[1]} {hoverData_[0] == 'transaction' ? 'normal' : hoverData_[0]+'-related'} transactions
-              </p>
               </div>
             </div>
           </div>
@@ -429,19 +439,45 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             hudAux_ ? "duration-[400ms]" : "duration-[1000ms]"
           } transition-all`}
         >
-          <p
-            className={`cursor-pointer ${
-              isDark_ ? "text-white" : "text-black"
-            } text-[12px] font-thin transition-all hover:opacity-70 ${
-              viewSwitch_
-                ? "duration-[1000ms] opacity-30"
-                : "duration-[1000ms] opacity-0"
-            }`}
-            onClick={() => {}}
+          <div
+            className={`${
+              hoverData_[0] == ""
+                ? "opacity-100 duration-[600ms]"
+                : "opacity-0 duration-[200ms]"
+            } transition-all relative`}
           >
-            {data ? data.arweave_address : ""}
-          </p>
+            <p
+              className={`cursor-pointer ${
+                isDark_ ? "text-white" : "text-black"
+              } text-[12px] font-thin transition-all hover:opacity-70 ${
+                viewSwitch_
+                  ? "duration-[1000ms] opacity-30"
+                  : "duration-[1000ms] opacity-0"
+              }`}
+              onClick={() => {}}
+            >
+              {data ? data.arweave_address : ""}
+            </p>
+          </div>
         </div>
+
+        <p
+          className={`${
+            isDark_ ? "text-white" : "text-black"
+          } text-[12px] font-thin text-white/60 p-0 ${
+            hoverData_[0] == ""
+              ? "opacity-0 duration-[50ms] top-[-10px]"
+              : "opacity-100 duration-[800ms] top-[-2px]"
+          } text-[12px] text-center transition-all absolute pl-[30px] w-full`}
+        >
+          {hoverData_[1]}{" "}
+          {hoverData_[0] == "transaction"
+            ? "normal"
+            : hoverData_[0] == ""
+            ? ''
+            : hoverData_[0] + ""}{" "}
+          {hoverData_[1] > 1 ? 'transactions' : 'transaction'}
+        </p>
 
         <div
           className={`cursor-pointer ${

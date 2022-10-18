@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Res } from "../../../src/types";
 import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
-import Visuals from "../Visuals";
+import Visuals from "./Visuals";
+import DynamicChart_ from "./DynamicChart";
 const Converter = require("timestamp-conv");
 
 interface DashboardProps {
@@ -62,11 +63,12 @@ const Dashboard = ({ data }: DashboardProps) => {
         />
 
         <div
-          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${
-            dash_ ? "opacity-100 left-[0px]" : "opacity-100 left-[0px]"
-          }`}
+          className={`w-full h-full absolute z-10 top-0 flex flex-row justify-center items-center transition-all duration-400`}
         >
-          {data ? <Visuals data={data.RSS3.transactions} /> : <div />}
+          {/* {data ? <Visuals data={data.RSS3.transactions} /> : <div />} */}
+          {data ? <svg width={500} height={500}>
+      <DynamicChart_ data={data.RSS3.transactions} x={250} y={250}/>
+    </svg> : <div />}
         </div>
 
         <div

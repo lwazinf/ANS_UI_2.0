@@ -10,10 +10,12 @@ import { select } from "d3-selection";
 import { createRef, useEffect, useRef, useState } from "react";
 import { Bar, Pie } from "react-roughviz";
 import { useRecoilState } from "recoil";
-import { extendDash, hudAux, isDarkMode, hoverData } from "../../atoms";
+import { extendDash, hudAux, isDarkMode, hoverData } from "../../../atoms";
 import * as d3 from "d3";
 import { drag } from "d3";
 import { values } from "lodash";
+import DynamicChart_ from "./DynamicChart";
+import { height } from "@mui/system";
 
 interface VisualsProps {
   data: any;
@@ -110,7 +112,8 @@ const Visuals = ({ data }: VisualsProps) => {
     let result_ = new Map();
     if (keys_.length == values_.length) {
       keys_.forEach((item, index, arr) => {
-        result_.set(item, values_[index]);
+        result_.set(item ? item : "undefined", values_[index]);
+        console.log(arr);
       });
     } else {
       return 0;
@@ -188,23 +191,37 @@ const Visuals = ({ data }: VisualsProps) => {
       );
 
     circles
-      .on("mouseenter", function (d) {
+      .on("mouseenter", function (d, i) {
         d3.select(this)
           .transition()
           .duration(200)
           .style("opacity", "1")
-          .attr("r", (d) => {
+          .attr("r", (d, i) => {
             return radiusScale(parseFloat(d.fee) * 8500);
           });
+
+          if(currentData == 'network'){
+          setHoverData_([i.network, parseFloat(i.fee)])
+        }else if(currentData == 'platform'){
+          setHoverData_([i.platform, parseFloat(i.fee)])
+        }else if(currentData == 'tag'){
+          setHoverData_([i.tag, parseFloat(i.fee)])
+        }else if(currentData == 'type'){
+          setHoverData_([i.type, parseFloat(i.fee)])
+        }
       })
-      .on("mouseleave", function (d) {
+      .on("mousemove", function (d, i) {})
+      .on("mouseleave", function (d, i) {
         d3.select(this)
           .transition()
           .duration(200)
           .style("opacity", "0.6")
-          .attr("r", (d) => {
+          .attr("r", (d, i) => {
             return radiusScale(parseFloat(d.fee) * 8000);
           });
+
+          setHoverData_(['', 0])
+          pieChart.style("opacity",'0.6')
       });
 
     function dragstarted(event, node) {
@@ -277,13 +294,17 @@ const Visuals = ({ data }: VisualsProps) => {
           return network_[d.data[0]];
         }
       })
-      .style("opacity", "0.6")
-      .style("cursor", "pointer")
-      .on("click", () => {
-          
+      .style("opacity", (d, i) => {
+        if(d.data[0] == hoverData_[0]){
+          return "1"
+        }else{
+          return "0.6"
+        }
       })
+      .style("cursor", "pointer")
+      .on("click", () => {})
       .on("mouseenter", function (d, i) {
-        clickSwitch()
+        clickSwitch();
         d3.select(this)
           .transition()
           .duration(100)
@@ -292,15 +313,14 @@ const Visuals = ({ data }: VisualsProps) => {
         setPieData0(i.data[1]);
         setPieData1(i.data[0]);
 
-        setHoverData_(i.data)
+        setHoverData_(i.data);
       })
       .on("mousemove", function (d, i) {
         setPieData0(i.data[1]);
         setPieData1(i.data[0]);
       })
       .on("mouseleave", function (d, i) {
-        
-          clickSwitch()
+        clickSwitch();
 
         d3.select(this)
           .transition()
@@ -310,7 +330,7 @@ const Visuals = ({ data }: VisualsProps) => {
         setPieData0(0);
         setPieData1("");
 
-        setHoverData_(['', 0])
+        setHoverData_(["", 0]);
       });
 
     // User Inputs
@@ -471,229 +491,231 @@ const Visuals = ({ data }: VisualsProps) => {
   }, []);
 
   return (
-    <div
-      className={`w-full h-full flex flex-row justify-start items-center relative overflow-hidden`}
-      onClick={() => {}}
-      id={"plateArea"}
-    >
-      <div
-        className={`flex flex-row justify-center items-center overflow-hidden relative ${
-          dash_
-            ? "w-[452px] duration-400 pl-[180px]"
-            : "w-[" + w0 + "px] duration-200"
-        } transition-all`}
-      >
-        <div
-          className={`flex flex-row justify-center items-center ${
-            dash_ ? "duration-400" : "duration-[1500ms]"
-          } transition-all`}
-          ref={svgRef0}
-        ></div>
-      </div>
+    <svg width={500} height={500}>
+      <DynamicChart_ data={data} x={250} y={250}/>
+    </svg>
+    // <div
+    //   className={`w-full h-full flex flex-row justify-start items-center relative overflow-hidden`}
+    //   onClick={() => {}}
+    //   id={"plateArea"}
+    // >
+    //   <div
+    //     className={`flex flex-row justify-center items-center overflow-hidden relative ${
+    //       dash_
+    //         ? "w-[452px] duration-400 pl-[180px]"
+    //         : "w-[" + w0 + "px] duration-200"
+    //     } transition-all`}
+    //   >
+    //     <div
+    //       className={`flex flex-row justify-center items-center ${
+    //         dash_ ? "duration-400" : "duration-[1500ms]"
+    //       } transition-all`}
+    //       ref={svgRef0}
+    //     ></div>
+    //   </div>
 
-      {/* <div
-        className={`flex flex-row justify-center items-center w-full h-full bg-black/0 backdrop-blur-sm absolute bottom-0 opacity-30 pointer-events-none`}
-      /> */}
+    //   {/* <div
+    //     className={`flex flex-row justify-center items-center w-full h-full bg-black/0 backdrop-blur-sm absolute bottom-0 opacity-30 pointer-events-none`}
+    //   /> */}
 
-      <div
-        className={`w-[150px] h-[200px] absolute left-[60px] top-[90px] flex flex-col justify-center items-end rounded-[4px] pr-[30px] ${
-          dash_
-            ? "opacity-0 duration-400 pointer-events-none"
-            : "opacity-80 duration-[1500ms] pointer-events-auto"
-        } transition-all`}
-        onClick={() => {}}
-      >
-        <div
-          className={`${
-            currentData == "tag" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
-          } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
-        >
-          <div
-            className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
-            } flex flex-col justify-center hover:opacity-100 ${
-              currentData == "tag" ? "opacity-100" : "opacity-0"
-            } duration-300 transition-all _displayFont1 font-[100]`}
-            onClick={() => {
-              setCurrentData("tag");
-            }}
-            id={`tag_`}
-          >
-            Tag
-          </div>
-          <FontAwesomeIcon
-            icon={faTag}
-            className={`text-center duration-[200ms] transition-all ${
-              isDark_
-                ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
-            } w-[20px] h-[20px]`}
-          />
-        </div>
+    //   <div
+    //     className={`w-[150px] h-[200px] absolute left-[60px] top-[90px] flex flex-col justify-center items-end rounded-[4px] pr-[30px] ${
+    //       dash_
+    //         ? "opacity-0 duration-400 pointer-events-none"
+    //         : "opacity-80 duration-[1500ms] pointer-events-auto"
+    //     } transition-all`}
+    //     onClick={() => {}}
+    //   >
+    //     <div
+    //       className={`${
+    //         currentData == "tag" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
+    //       } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
+    //     >
+    //       <div
+    //         className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
+    //           isDark_ ? "text-white/80" : "text-black/80"
+    //         } flex flex-col justify-center hover:opacity-100 ${
+    //           currentData == "tag" ? "opacity-100" : "opacity-0"
+    //         } duration-300 transition-all _displayFont1 font-[100]`}
+    //         onClick={() => {
+    //           setCurrentData("tag");
+    //         }}
+    //         id={`tag_`}
+    //       >
+    //         Tag
+    //       </div>
+    //       <FontAwesomeIcon
+    //         icon={faTag}
+    //         className={`text-center duration-[200ms] transition-all ${
+    //           isDark_
+    //             ? "hover:text-white text-white/80"
+    //             : "hover:text-black text-black/80"
+    //         } w-[20px] h-[20px]`}
+    //       />
+    //     </div>
 
-        <div
-          className={`${
-            currentData == "network" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
-          } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
-        >
-          <div
-            className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
-            } flex flex-col justify-center hover:opacity-100 ${
-              currentData == "network" ? "opacity-100" : "opacity-0"
-            } duration-300 transition-all _displayFont1 font-[100]`}
-            onClick={() => {
-              setCurrentData("network");
-            }}
-            id={`network_`}
-          >
-            Network
-          </div>
-          <FontAwesomeIcon
-            icon={faTowerBroadcast}
-            className={`text-center duration-[200ms] transition-all ${
-              isDark_
-                ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
-            } w-[20px] h-[20px]`}
-          />
-        </div>
+    //     <div
+    //       className={`${
+    //         currentData == "network" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
+    //       } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
+    //     >
+    //       <div
+    //         className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
+    //           isDark_ ? "text-white/80" : "text-black/80"
+    //         } flex flex-col justify-center hover:opacity-100 ${
+    //           currentData == "network" ? "opacity-100" : "opacity-0"
+    //         } duration-300 transition-all _displayFont1 font-[100]`}
+    //         onClick={() => {
+    //           setCurrentData("network");
+    //         }}
+    //         id={`network_`}
+    //       >
+    //         Network
+    //       </div>
+    //       <FontAwesomeIcon
+    //         icon={faTowerBroadcast}
+    //         className={`text-center duration-[200ms] transition-all ${
+    //           isDark_
+    //             ? "hover:text-white text-white/80"
+    //             : "hover:text-black text-black/80"
+    //         } w-[20px] h-[20px]`}
+    //       />
+    //     </div>
 
-        <div
-          className={`${
-            currentData == "type" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
-          } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
-        >
-          <div
-            className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
-            } flex flex-col justify-center hover:opacity-100 ${
-              currentData == "type" ? "opacity-100" : "opacity-0"
-            } duration-300 transition-all _displayFont1 font-[100]`}
-            onClick={() => {
-              setCurrentData("type");
-            }}
-            id={`type_`}
-          >
-            Type
-          </div>
-          <FontAwesomeIcon
-            icon={faBoxesStacked}
-            className={`text-center duration-[200ms] transition-all ${
-              isDark_
-                ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
-            } w-[20px] h-[20px]`}
-          />
-        </div>
-        <div
-          className={`${
-            currentData == "platform" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
-          } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-col relative overflow-hidden`}
-        >
-          <div
-            className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
-            } flex flex-col justify-center hover:opacity-100 ${
-              currentData == "platform" ? "opacity-100" : "opacity-0"
-            } duration-300 transition-all _displayFont1 font-[100]`}
-            onClick={() => {
-              setCurrentData("platform");
-              console.log(...getData("platform").keys());
-            }}
-            id={`platform_`}
-          >
-            Platform
-          </div>
-          <FontAwesomeIcon
-            icon={faCoins}
-            className={`text-center duration-[200ms] transition-all ${
-              isDark_
-                ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
-            } w-[20px] h-[20px]`}
-          />
-        </div>
-      </div>
+    //     <div
+    //       className={`${
+    //         currentData == "type" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
+    //       } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-row relative overflow-hidden`}
+    //     >
+    //       <div
+    //         className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
+    //           isDark_ ? "text-white/80" : "text-black/80"
+    //         } flex flex-col justify-center hover:opacity-100 ${
+    //           currentData == "type" ? "opacity-100" : "opacity-0"
+    //         } duration-300 transition-all _displayFont1 font-[100]`}
+    //         onClick={() => {
+    //           setCurrentData("type");
+    //         }}
+    //         id={`type_`}
+    //       >
+    //         Type
+    //       </div>
+    //       <FontAwesomeIcon
+    //         icon={faBoxesStacked}
+    //         className={`text-center duration-[200ms] transition-all ${
+    //           isDark_
+    //             ? "hover:text-white text-white/80"
+    //             : "hover:text-black text-black/80"
+    //         } w-[20px] h-[20px]`}
+    //       />
+    //     </div>
+    //     <div
+    //       className={`${
+    //         currentData == "platform" ? "w-[90px]" : "w-[20px] hover:w-[100px]"
+    //       } cursor-pointer duration-[200ms] transition-all my-[5px] flex flex-col relative overflow-hidden`}
+    //     >
+    //       <div
+    //         className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
+    //           isDark_ ? "text-white/80" : "text-black/80"
+    //         } flex flex-col justify-center hover:opacity-100 ${
+    //           currentData == "platform" ? "opacity-100" : "opacity-0"
+    //         } duration-300 transition-all _displayFont1 font-[100]`}
+    //         onClick={() => {
+    //           setCurrentData("platform");
+    //           console.log(...getData("platform").keys());
+    //         }}
+    //         id={`platform_`}
+    //       >
+    //         Platform
+    //       </div>
+    //       <FontAwesomeIcon
+    //         icon={faCoins}
+    //         className={`text-center duration-[200ms] transition-all ${
+    //           isDark_
+    //             ? "hover:text-white text-white/80"
+    //             : "hover:text-black text-black/80"
+    //         } w-[20px] h-[20px]`}
+    //       />
+    //     </div>
+    //   </div>
 
-      <div
-        className={`flex flex-row justify-center items-center w-full h-[80px] rounded-[4px] absolute left-[50px] bottom-[0px] ${
-          dash_
-            ? "opacity-0 duration-400"
-            : "opacity-80 duration-[1500ms] hover:opacity-30"
-        } transition-all duration-400`}
-      >
-        <p
-          onClick={() => {
-            console.log([...getData(currentData).keys()]);
-          }}
-          className={`min-w-[20px] h-full flex flex-col mx-[10px] justify-center items-center
-      ${
-        isDark_ ? "text-white" : "text-black"
-      } _displayFont0 font-[700] text-right relative bottom-0 text-[35px] `}
-        >
-          {currentData.toUpperCase()}
-        </p>
+    //   <div
+    //     className={`flex flex-row justify-center items-center w-full h-[80px] rounded-[4px] absolute left-[50px] bottom-[0px] ${
+    //       dash_
+    //         ? "opacity-0 duration-400"
+    //         : "opacity-80 duration-[1500ms] hover:opacity-30"
+    //     } transition-all duration-400`}
+    //   >
+    //     <p
+    //       onClick={() => {
+    //         console.log([...getData(currentData).keys()]);
+    //       }}
+    //       className={`min-w-[20px] h-full flex flex-col mx-[10px] justify-center items-center
+    //   ${
+    //     isDark_ ? "text-white" : "text-black"
+    //   } _displayFont0 font-[700] text-right relative bottom-0 text-[35px] `}
+    //     >
+    //       {currentData.toUpperCase()}
+    //     </p>
 
-        <p
-          className={`text-[16px] w-[200px] ${
-            isDark_ ? "text-white/70" : "text-black"
-          } text-left pointer-events-none leading-[15px] _displayFont1 font-[100]`}
-        >
-          {currentData == "network"
-            ? "Transactions according to network used.."
-            : currentData == "platform"
-            ? "Transactions according to platform used.."
-            : currentData == "tag"
-            ? "Transactions according to category.."
-            : "Transactions according to nature of transaction.."}
-        </p>
-      </div>
+    //     <p
+    //       className={`text-[16px] w-[200px] ${
+    //         isDark_ ? "text-white/70" : "text-black"
+    //       } text-left pointer-events-none leading-[15px] _displayFont1 font-[100]`}
+    //     >
+    //       {currentData == "network"
+    //         ? "Transactions according to network used.."
+    //         : currentData == "platform"
+    //         ? "Transactions according to platform used.."
+    //         : currentData == "tag"
+    //         ? "Transactions according to category.."
+    //         : "Transactions according to nature of transaction.."}
+    //     </p>
+    //   </div>
 
-      <div
-        className={`absolute top-[195px] right-[140px] flex flex-col ${
-          dash_
-            ? "opacity-0 duration-400 pointer-events-none"
-            : "opacity-100 duration-[1500ms] pointer-events-auto"
-        } transition-all`}
-      >
-        <p
-          className={`text-[20px] w-[200px] ${
-            isDark_ ? "text-white/70" : "text-black"
-          } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
-            pieData0 == 0
-              ? "opacity-30 duration-200"
-              : "opacity-80 duration-800"
-          }`}
-        >
-          {pieData0}
-        </p>
-        <p
-          className={`text-[17px] min-w-[200px] relative top-[5px] ${
-            isDark_ ? "text-white/70" : "text-black"
-          } text-center pointer-events-none leading-[15px] _displayFont1 font-[200] opacity-60`}
-        >
-          {pieData1}
-        </p>
-      </div>
-
-      <div
-        className={`flex flex-col absolute right-[90px] top-0 ${
-          dash_
-            ? "opacity-0 duration-400 pointer-events-none"
-            : "opacity-100 duration-[1500ms] pointer-events-auto"
-        } transition-all`}
-        onClick={() => {}}
-        ref={svgRef1}
-      ></div>
-          <div
-      className={`w-0 h-0 opacity absolute top-0 left-0`}
-      id={"switchID"}
-      onClick={() => {
-        setHudAux_(!hudAux_);
-      }}
-    />
-    </div>
+    //   <div
+    //     className={`absolute top-[195px] right-[140px] flex flex-col ${
+    //       dash_
+    //         ? "opacity-0 duration-400 pointer-events-none"
+    //         : "opacity-100 duration-[1500ms] pointer-events-auto"
+    //     } transition-all`}
+    //   >
+    //     <p
+    //       className={`text-[20px] w-[200px] ${
+    //         isDark_ ? "text-white/70" : "text-black"
+    //       } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
+    //         pieData0 == 0
+    //           ? "opacity-30 duration-200"
+    //           : "opacity-80 duration-800"
+    //       }`}
+    //     >
+    //       {pieData0}
+    //     </p>
+    //     <p
+    //       className={`text-[17px] min-w-[200px] relative top-[5px] ${
+    //         isDark_ ? "text-white/70" : "text-black"
+    //       } text-center pointer-events-none leading-[15px] _displayFont1 font-[200] opacity-60`}
+    //     >
+    //       {pieData1}
+    //     </p>
+    //   </div>
+    //   {/* <div
+    //     className={`flex flex-col absolute right-[90px] top-0 ${
+    //       dash_
+    //         ? "opacity-0 duration-400 pointer-events-none"
+    //         : "opacity-100 duration-[1500ms] pointer-events-auto"
+    //     } transition-all`}
+    //     onClick={() => {}}
+    //     ref={svgRef1}
+    //   ></div> */}
+    //   <div
+    //     className={`w-0 h-0 opacity absolute top-0 left-0`}
+    //     id={"switchID"}
+    //     onClick={() => {
+    //       setHudAux_(!hudAux_);
+    //     }}
+    //   />
+    // </div>
   );
 };
 
