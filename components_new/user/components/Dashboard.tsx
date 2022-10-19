@@ -3,7 +3,8 @@ import { Res } from "../../../src/types";
 import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
 import Visuals from "./Visuals";
-import DynamicChart_ from "./DynamicChart";
+import PieChart_ from "./PieChart";
+import BubbleChart_ from "./BubbleChart";
 const Converter = require("timestamp-conv");
 
 interface DashboardProps {
@@ -66,9 +67,19 @@ const Dashboard = ({ data }: DashboardProps) => {
           className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400`}
         >
           {data ? <Visuals data={data.RSS3.transactions} /> : <div />}
-          {data ? <svg width={200} height={200} className={`absolute right-[140px] top-[110px]`}>
-      <DynamicChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
+          
+          {/* {data ? <svg width={200} height={200} className={`absolute left-[140px] top-[110px]`}>
+      <BubbleChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
+    </svg> : <div />} */}
+
+    {data ? <svg width={200} height={200} className={`absolute right-[140px] top-[110px] ${
+          dash_
+            ? "opacity-0 duration-400 pointer-events-none"
+            : "opacity-80 duration-[1500ms] pointer-events-auto"
+        } transition-all`}>
+      <PieChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
     </svg> : <div />}
+
         </div>
 
         <div

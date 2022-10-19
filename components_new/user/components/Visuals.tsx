@@ -1,4 +1,3 @@
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import {
   faBoxesStacked,
   faCoins,
@@ -20,7 +19,7 @@ import {
 import * as d3 from "d3";
 import { drag } from "d3";
 import { values } from "lodash";
-import DynamicChart_ from "./DynamicChart";
+import PieChart_ from "./PieChart";
 import { height } from "@mui/system";
 
 interface VisualsProps {
@@ -110,28 +109,6 @@ const Visuals = ({ data }: VisualsProps) => {
   };
 
   useEffect(() => {
-    const simulation = d3
-      .forceSimulation()
-      .force("x", d3.forceX().strength(0.0005))
-      .force("y", d3.forceX().strength(0.0005))
-      .force("charge", d3.forceManyBody().strength(1))
-      .force("centerStage", d3.forceCenter(w0 / 2.5, h0 / 2))
-      .force(
-        "collide",
-        d3.forceCollide((d) => {
-          return radiusScale(parseFloat(d.fee) * 8000) + 1.5;
-        })
-      );
-
-    const ticked = () => {
-      circles
-        .attr("cx", (d) => {
-          return d.x;
-        })
-        .attr("cy", (d) => {
-          return d.y + 1;
-        });
-    };
 
     // First Chart // // // // // // // // // // // //
 
@@ -171,9 +148,7 @@ const Visuals = ({ data }: VisualsProps) => {
       })
       .call(
         drag().on("start", dragstarted).on("drag", dragged).on("end", dragended)
-      );
-
-    circles
+      )
       .on("mouseenter", function (d, i) {
         d3.select(this)
           .transition()
@@ -184,13 +159,13 @@ const Visuals = ({ data }: VisualsProps) => {
           });
 
         if (currentData_ == "network") {
-          setHoverData_([i.network, parseFloat(i.fee)]);
+          setHoverData_([i.network, parseFloat(i.fee).toFixed(2)]);
         } else if (currentData_ == "platform") {
-          setHoverData_([i.platform, parseFloat(i.fee)]);
+          setHoverData_([i.platform, parseFloat(i.fee).toFixed(2)]);
         } else if (currentData_ == "tag") {
-          setHoverData_([i.tag, parseFloat(i.fee)]);
+          setHoverData_([i.tag, parseFloat(i.fee).toFixed(2)]);
         } else if (currentData_ == "type") {
-          setHoverData_([i.type, parseFloat(i.fee)]);
+          setHoverData_([i.type, parseFloat(i.fee).toFixed(2)]);
         }
       })
       .on("mousemove", function (d, i) {})
@@ -250,10 +225,31 @@ const Visuals = ({ data }: VisualsProps) => {
       });
     });
 
+    const simulation = d3
+      .forceSimulation()
+      .force("x", d3.forceX().strength(0.0005))
+      .force("y", d3.forceX().strength(0.0005))
+      .force("charge", d3.forceManyBody().strength(1))
+      .force("centerStage", d3.forceCenter(w0 / 2.5, h0 / 2))
+      .force(
+        "collide",
+        d3.forceCollide((d) => {
+          return radiusScale(parseFloat(d.fee) * 8000) + 1.5;
+        })
+      );
+
+    const ticked = () => {
+      circles
+        .attr("cx", (d) => {
+          return d.x;
+        })
+        .attr("cy", (d) => {
+          return d.y + 1;
+        });
+    };
+
     simulation.nodes(data).on("tick", ticked);
   }, []);
-
-  console.log(hoverData_[0])
 
   return (
     <div
@@ -380,7 +376,6 @@ const Visuals = ({ data }: VisualsProps) => {
             } duration-300 transition-all _displayFont1 font-[100]`}
             onClick={() => {
               setCurrentData_("platform");
-              console.log(...getData("platform").keys());
             }}
             id={`platform_`}
           >
@@ -405,9 +400,7 @@ const Visuals = ({ data }: VisualsProps) => {
         } transition-all duration-400`}
       >
         <p
-          onClick={() => {
-            console.log([...getData(currentData_).keys()]);
-          }}
+          onClick={() => {}}
           className={`min-w-[20px] h-full flex flex-col mx-[10px] justify-center items-center
       ${
         isDark_ ? "text-white" : "text-black"
@@ -442,26 +435,34 @@ const Visuals = ({ data }: VisualsProps) => {
           className={`text-[20px] w-[200px] ${
             isDark_ ? "text-white/70" : "text-black"
           } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
-            hoverData_[0] == 0
+            hoverData_[0] == 0 || hoverData_[0] == 'ArDrive'
               ? "opacity-30 duration-100 bottom-[-5px]"
               : "opacity-80 duration-100 bottom-[3px]"
           } transition-all`}
         >
-          {hoverData_[1]}
+          {
+            hoverData_[0] == 'ArDrive' ?
+            0 : hoverData_[1]
+          }
         </p>
-        <div className={`transition-all duration-[1500ms] flex flex-col justify-center items-center ${
-              hoverData_[0] == 0
-                ? 'opacity-0' : 'opacity-100'}`}>
+        <div
+          className={`transition-all duration-[1500ms] flex flex-col justify-center items-center ${
+            hoverData_[0] == 0 ? "opacity-0" : "opacity-100"
+          }`}
+        >
           <p
             className={`text-[17px] min-w-[200px] relative ${
               isDark_ ? "text-white/70" : "text-black"
             }  ${
-              hoverData_[0] == 0
+              hoverData_[0] == 0 || hoverData_[0] == 'ArDrive'
                 ? "opacity-30 duration-100 bottom-[-10px]"
                 : "opacity-80 duration-[1000ms] bottom-[0px]"
             } transition-all text-center pointer-events-none leading-[15px] _displayFont1 font-[100] opacity-60`}
           >
-            {hoverData_[0]}
+            {
+            hoverData_[0] == 'ArDrive' ?
+            '' : hoverData_[0]
+          }
           </p>
         </div>
       </div>

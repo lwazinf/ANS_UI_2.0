@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as d3 from "d3";
 import { useRecoilState } from "recoil";
 import { currentState, hoverData, hudAux } from "../../../atoms";
 
-interface DynamicChart_Props {}
+interface PieChart_Props {}
 
 const Arc = ({ arcData }: any) => {
   
@@ -85,13 +85,26 @@ const Arc = ({ arcData }: any) => {
     setHoverData_(["", 0])
   };
 
+  const getMap = (_currentData) => {
+    let keys_ = [...getData(_currentData).keys()];
+    let values_ = [...getData(_currentData).values()];
+    let result_ = new Map();
+    if (keys_.length == values_.length) {
+      keys_.forEach((item, index, arr) => {
+        result_.set(item ? item : "undefined", values_[index]);
+      });
+    } else {
+      return 0;
+    }
+    return result_;
+  };
+
   return (
     <path
-      className={`${hoverData_[0] == arcData.data[0] ? 'opacity-100' : 'opacity-60'} transition-all duration-100`}
+      className={`${pieData1_ == arcData.data[0] || hoverData_[0] == arcData.data[0] ? 'opacity-100' : 'opacity-60'} transition-all duration-100`}
       d={arc(arcData)}
       fill={getColor()}
       onMouseOver={() => {
-        currentState_
         mouseOver(arcData)
       }}
       onMouseOut={mouseOut}
@@ -99,9 +112,12 @@ const Arc = ({ arcData }: any) => {
   );
 };
 
-const DynamicChart_ = ({ data, x, y }: DynamicChart_Props) => {
+const PieChart_ = ({ data, x, y }: PieChart_Props) => {
+    const [percentage_, setPercentage_] = useState(0)
   const pie = d3
     .pie()
+    .startAngle(0)
+    .endAngle(percentage_ * Math.PI * 2)
     .padAngle(0.05)
     .value((d) => parseFloat(d[1]));
 
@@ -140,6 +156,14 @@ const DynamicChart_ = ({ data, x, y }: DynamicChart_Props) => {
     return result_;
   };
   
+  useEffect(() => {
+    setPercentage_(0)
+
+    d3.selection().transition('pie-reveal').duration(3000).tween('Percentage_', () => {
+        const percentInterpolate = d3.interpolate(percentage_, 100)
+        return t => setPercentage_(percentInterpolate(t))
+    })
+  }, [data])
   return (
     <g transform={`translate(${x}, ${y})`}>
       {pie(getMap(currentState_)).map((d) => {
@@ -149,4 +173,4 @@ const DynamicChart_ = ({ data, x, y }: DynamicChart_Props) => {
   );
 };
 
-export default DynamicChart_;
+export default PieChart_;
