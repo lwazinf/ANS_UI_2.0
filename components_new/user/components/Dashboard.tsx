@@ -37,7 +37,9 @@ const Dashboard = ({ data }: DashboardProps) => {
 
   return (
     <div
-      className={`w-[905px] h-[420px] relative pl-[2px] ${dash_ ? 'pr-[1px]' : 'pr-[0px]'} flex flex-row justify-center items-center mx-auto`}
+      className={`w-[905px] h-[420px] relative pl-[2px] ${
+        dash_ ? "pr-[1px]" : "pr-[0px]"
+      } flex flex-row justify-center items-center mx-auto`}
     >
       {/* Left Plate */}
 
@@ -64,28 +66,41 @@ const Dashboard = ({ data }: DashboardProps) => {
         />
 
         <div
-          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400`}
+          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${dash_ ? 'pointer-events-none' : 'pointer-events-auto'}`}
         >
           {data ? <Visuals data={data.RSS3.transactions} /> : <div />}
-          
+
           {/* {data ? <svg width={200} height={200} className={`absolute left-[140px] top-[110px]`}>
       <BubbleChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
     </svg> : <div />} */}
 
-    {data ? <svg width={200} height={200} className={`absolute right-[140px] top-[110px] ${
-          dash_
-            ? "opacity-0 duration-400 pointer-events-none"
-            : "opacity-80 duration-[1500ms] pointer-events-auto"
-        } transition-all`}>
-      <PieChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
-    </svg> : <div />}
-
+          {data ? (
+            <svg
+              width={200}
+              height={200}
+              className={`absolute right-[140px] top-[110px] ${
+                dash_
+                  ? "opacity-0 duration-400 pointer-events-none"
+                  : "opacity-80 duration-[1500ms] pointer-events-auto"
+              } transition-all`}
+            >
+              <PieChart_
+                data={data.RSS3.transactions}
+                x={200 / 2}
+                y={200 / 2}
+              />
+            </svg>
+          ) : (
+            <div />
+          )}
         </div>
 
         <div
-          className={`${
-            isDark_ ? "bg-[#0f1729]/30" : "bg-white/30"
-          } ${currentANFT_ == -1 ? 'duration-[1000ms] backdrop-blur-none pointer-events-none' : 'duration-200 backdrop-blur-xl pointer-events-auto'} transition-all h-full w-full absolute top-0 left-0`}
+          className={`${isDark_ ? "bg-[#0f1729]/30" : "bg-white/30"} ${
+            currentANFT_ == -1
+              ? "duration-[1000ms] backdrop-blur-none pointer-events-none"
+              : "duration-200 backdrop-blur-xl pointer-events-auto"
+          } transition-all h-full w-full absolute top-0 left-0`}
         />
 
         {/* Hidden Info Panel */}
@@ -99,6 +114,8 @@ const Dashboard = ({ data }: DashboardProps) => {
           {currentANFT_ != -1 ? (
             <a
               href={`https://koi.rocks/content-detail/${data?.ANFTS.koii[currentANFT_].id}`}
+              target={"_blank"}
+                    rel={"noreferrer"}
             >
               <p
                 className={`text-[14px] ${
@@ -245,7 +262,6 @@ const Dashboard = ({ data }: DashboardProps) => {
               )}
             </div>
           </div>
-          <div className={`w-full h-[38px]`} />
         </div>
       </div>
 
@@ -271,7 +287,7 @@ const Dashboard = ({ data }: DashboardProps) => {
                 className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all ${
                   currentANFT_ == i
                     ? "opacity-100 duration-[500ms] grayscale-0"
-                    : "opacity-60 duration-[200ms] grayscale-[70%]"
+                    : "opacity-80 duration-[200ms] grayscale-[70%]"
                 } hover:opacity-80`}
                 onClick={() => {
                   if (currentANFT_ == i) {
@@ -291,9 +307,6 @@ const Dashboard = ({ data }: DashboardProps) => {
             );
           })}
         </div>
-        {/* <div
-        className={`flex flex-row justify-center items-center w-full h-full bg-black/0 backdrop-blur-sm absolute bottom-0 opacity-30 pointer-events-none`}
-      /> */}
       </div>
     </div>
   );

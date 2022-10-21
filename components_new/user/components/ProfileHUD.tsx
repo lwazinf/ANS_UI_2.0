@@ -4,15 +4,13 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import {
-  faCloud,
-  faCloudArrowDown,
-  faCube,
+  faAngleLeft,
+  faBacteria,
   faExpand,
   faGlobe,
-  faGlobeAfrica,
+  faPieChart,
   faQrcode,
-  faUserTag,
-  faUserTie,
+  faScroll,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -24,9 +22,14 @@ import {
   currentANFT,
   hudAux,
   hoverData,
+  showNews,
+  currentState,
 } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
+import * as htmlToImage from "html-to-image";
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
+import download from "downloadjs";
 
 interface ProfileHUDProps {
   data: Res | undefined;
@@ -36,8 +39,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
   // Users can click on the QRCode to show the profile's Display picture
   const [viewQR_, setViewQR_] = useState(true);
 
+  const [currentData_, setCurrentData_] = useRecoilState(currentState);
+
   // Clicking "assets/Transactions" reveals one of two dashboard views.. Dash is the Recoil atom which changes the ui
   const [dash_, setDash_] = useRecoilState(extendDash);
+
+  const [showNews_, setShowNews_] = useRecoilState(showNews);
 
   // The currentANFT_ Recoil atom uses this variable to reset the dashboard's UI
   const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
@@ -61,6 +68,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       className={`w-[900px] h-[300px] rounded-[4px] shadow-md ${
         isDark_ ? "bg-black" : "bg-white"
       } relative mx-auto mt-4 flex flex-col justify-center items-center overflow-hidden mb-4`}
+      id={`userCard`}
     >
       {/* Cover Photo */}
       <img
@@ -97,7 +105,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         href={`https://arwiki.wiki/#/en/category/the_arweave_project`}
         target={"_blank"}
         rel={"noreferrer"}
-        className={`absolute top-[-10px] left-[10px] z-5`}
+        className={`absolute top-[-10px] left-[10px] z-10`}
       >
         <img
           className={`w-[100px] h-[100px] rotate-[20deg] object-cover ${
@@ -135,7 +143,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                   : "duration-[100ms] opacity-70"
               }`}
             >
-              {data ? data.ANS.nickname.toUpperCase() : ""}
+              {hoverData_[0] == "expand"
+                ? "expand".toUpperCase()
+                : data
+                ? data.ANS.nickname.toUpperCase()
+                : ""}
             </p>
           </div>
         </div>
@@ -152,9 +164,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           >
             <div
               className={`${
-                hoverData_[0] == ""
-                  ? "opacity-100 bottom-[0px] duration-[600ms]"
-                  : "opacity-0 bottom-[-2px] duration-[400ms]"
+                hoverData_[0] != "" || showNews_
+                  ? "opacity-0 bottom-[-2px] duration-[400ms]"
+                  : "opacity-100 bottom-[0px] duration-[600ms]"
               } relative transition-all`}
             >
               <p
@@ -164,7 +176,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                   viewSwitch_
                     ? "duration-[400ms] opacity-100"
                     : "duration-[100ms] opacity-70"
-                } ${hoverData_[0] == "text-[12px]" ? "" : "text-[15px]"}`}
+                } ${
+                  hoverData_[0] != "" || showNews_
+                    ? "text-[12px]"
+                    : "text-[15px]"
+                }`}
               >
                 {data ? data.ANS.nickname.toUpperCase() : ""}
               </p>
@@ -172,14 +188,16 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
             <div
               className={`w-full h-full ${
-                hoverData_[0] != ""
+                hoverData_[0] != "" || showNews_
                   ? "opacity-100 pt-[0px] duration-[1000ms]"
                   : "opacity-0 pt-[20px] duration-[1400ms]"
               } absolute top-0 left-0 flex flex-col justify-center items-center`}
             >
               <p
                 className={`cursor-pointer ${
-                  hoverData_[0] != "" ? "text-[15px]" : "text-[12px]"
+                  hoverData_[0] != "" || showNews_
+                    ? "text-[15px]"
+                    : "text-[12px]"
                 } ${
                   isDark_ ? "text-white" : "text-black"
                 } absolute font-black transition-all hover:opacity-100 ${
@@ -188,7 +206,13 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                     : "duration-[100ms] opacity-70"
                 }`}
               >
-                {hoverData_[0].toUpperCase()}
+                {hoverData_[0] == "dashboard0"
+                  ? "Dashboard".toUpperCase()
+                  : showNews_
+                  ? "Show Time"
+                  : hoverData_[0] == "display"
+                  ? data.ANS.nickname.toUpperCase()
+                  : hoverData_[0].toUpperCase()}
               </p>
             </div>
           </div>
@@ -197,7 +221,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
       {/* Main Control Area */}
       <div
-        className={`w-full h-full absolute flex flex-row justify-center items-center`}
+        className={`w-full h-full absolute ${
+          showNews_
+            ? "duration-200 opacity-5 top-[-140px] pointer-events-none"
+            : "duration-700 opacity-100 top-[0px] pointer-events-auto"
+        } transition-all flex flex-row justify-center items-center`}
       >
         <div
           className={`w-full h-full absolute top-0 pl-[245px] flex flex-row justify-center items-center transition-all`}
@@ -207,13 +235,17 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             className={`flex flex-col justify-center items-end transition-all w-[30px] h-[130px] ${
               viewSwitch_
                 ? "opacity-100 pointer-events-auto duration-[400ms]"
-                : "opacity-10 pointer-events-none duration-[800ms]"
+                : "opacity-0 pointer-events-none duration-[800ms]"
             }`}
             onClick={() => {}}
           >
             <div
               className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden ${
-                hoverData_[0] == "" || hoverData_[0] == "ArDrive"
+                hoverData_[0] == "" ||
+                hoverData_[0] == "ArDrive" ||
+                hoverData_[0] == "display" ||
+                hoverData_[0] == "news" ||
+                hoverData_[0] == "expand"
                   ? "opacity-100"
                   : "opacity-80"
               }`}
@@ -246,7 +278,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             </div>
             <div
               className={`w-[20px] hover:w-[120px] cursor-default duration-[200ms] transition-all ${
-                hoverData_[0] == "" || hoverData_[0] == "ArDrive"
+                hoverData_[0] == "" ||
+                hoverData_[0] == "ArDrive" ||
+                hoverData_[0] == "display" ||
+                hoverData_[0] == "news" ||
+                hoverData_[0] == "expand"
                   ? "opacity-100"
                   : "opacity-80"
               } my-[4px] flex flex-row relative overflow-hidden`}
@@ -269,7 +305,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             </div>
             <div
               className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] ${
-                hoverData_[0] == "" || hoverData_[0] == "ArDrive"
+                hoverData_[0] == "" ||
+                hoverData_[0] == "ArDrive" ||
+                hoverData_[0] == "display" ||
+                hoverData_[0] == "news" ||
+                hoverData_[0] == "expand"
                   ? "opacity-100"
                   : "opacity-80"
               } transition-all my-[4px] flex flex-row relative overflow-hidden`}
@@ -302,7 +342,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             </div>
             <div
               className={`w-[20px] hover:w-[120px] ${
-                hoverData_[0] == "" || hoverData_[0] == "ArDrive"
+                hoverData_[0] == "" ||
+                hoverData_[0] == "ArDrive" ||
+                hoverData_[0] == "display" ||
+                hoverData_[0] == "news" ||
+                hoverData_[0] == "expand"
                   ? "opacity-100"
                   : "opacity-80"
               } cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden`}
@@ -354,6 +398,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               }`}
               onClick={() => {
                 setViewQR_(!viewQR_);
+              }}
+              onMouseEnter={() => {
+                return setHoverData_(["display", 0]);
+              }}
+              onMouseLeave={() => {
+                return setHoverData_(["", 0]);
               }}
             >
               {/* We use the username (suffix) & address (parameter) in the address bar already */}
@@ -418,7 +468,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               {/* Username */}
 
               <div
-                className={`w-[90px] h-[20px] relative right-[2px] mt-2 flex flex-col justify-center items-center`}
+                className={`w-[90px] h-[24px] relative right-[2px] mt-4 mb-1 flex flex-col justify-center items-center`}
                 onMouseEnter={() => {
                   setHoverData_(["ArDrive", 0]);
                 }}
@@ -426,13 +476,20 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                   setHoverData_(["", 0]);
                 }}
               >
-                <img
-                  src={
-                    "https://ardrive.io/wp-content/uploads/2022/09/ArDrive-Logo-Wordmark-Light.png"
-                  }
-                  alt={`ArDrive Logo`}
-                  className={`h-[19px] object-cover opacity-60 hover:opacity-80 duration-400 transition-all cursor-pointer`}
-                />
+                <a
+                  href={`https://ardrive.io`}
+                  target={"_blank"}
+                  rel={"noreferrer"}
+                  className={`absolute h-[19px]`}
+                >
+                  <img
+                    src={
+                      "https://ardrive.io/wp-content/uploads/2022/09/ArDrive-Logo-Wordmark-Light.png"
+                    }
+                    alt={`ArDrive Logo`}
+                    className={`h-[19px] object-cover opacity-60 hover:opacity-80 duration-400 transition-all cursor-pointer`}
+                  />
+                </a>
               </div>
 
               <div
@@ -441,7 +498,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 <p
                   className={`text-[35px] ${
                     isDark_ ? "text-white" : "text-black"
-                  } font-black mt-[-10px] transition-all duration-200 ${
+                  } font-black mt-[-10px] transition-all duration-200 pointer-events-none ${
                     hoverData_[0] == "" ? "opacity-100" : "opacity-100"
                   }`}
                 >
@@ -476,9 +533,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         >
           <div
             className={`${
-              hoverData_[0] == ""
-                ? "opacity-100 duration-[600ms]"
-                : "opacity-0 duration-[200ms]"
+              hoverData_[0] != "" || showNews_
+                ? "opacity-0 duration-[200ms]"
+                : "opacity-100 duration-[600ms]"
             } transition-all relative`}
           >
             <p
@@ -500,68 +557,119 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           className={`${
             isDark_ ? "text-white" : "text-black"
           } text-[12px] font-thin text-white/60 p-0 ${
-            hoverData_[0] == ""
-              ? "opacity-0 duration-[50ms] top-[-10px]"
-              : "opacity-100 duration-[800ms] top-[-2px]"
+            hoverData_[0] != "" || showNews_
+              ? "opacity-100 duration-[800ms] top-[-2px]"
+              : "opacity-0 duration-[50ms] top-[-10px]"
           } text-[12px] text-center transition-all absolute pl-[30px] w-full`}
         >
-          {hoverData_[0] != "ArDrive" ? hoverData_[1] : ""}
-          {hoverData_[0] != "ArDrive" ? " " : ""}
-          {hoverData_[0] == "ArDrive"
+          {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
+            ? ""
+            : showNews_
+            ? ""
+            : hoverData_[0] == "" && hoverData_[1] == 0
+            ? ""
+            : hoverData_[0] == "display"
+            ? ""
+            : hoverData_[0] == "news"
+            ? ""
+            : hoverData_[0] == "expand"
+            ? ""
+            : hoverData_[0] != "ArDrive"
+            ? hoverData_[1]
+            : ""}
+          {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
+            ? ""
+            : showNews_
+            ? ""
+            : hoverData_[0] == "" && hoverData_[1] == 0
+            ? ""
+            : hoverData_[0] == "display"
+            ? ""
+            : hoverData_[0] == "news"
+            ? ""
+            : hoverData_[0] == "expand"
+            ? ""
+            : hoverData_[0] != "ArDrive"
+            ? " "
+            : ""}
+          {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
+            ? ""
+            : showNews_
+            ? ""
+            : hoverData_[0] == "" && hoverData_[1] == 0
+            ? ""
+            : hoverData_[0] == "display"
+            ? ""
+            : hoverData_[0] == "ArDrive"
+            ? ""
+            : hoverData_[0] == "news"
+            ? ""
+            : hoverData_[0] == "expand"
             ? ""
             : hoverData_[1].toString().includes(".")
             ? ""
             : hoverData_[0] == "transaction"
             ? "normal"
             : hoverData_[0] == ""
-            ? ""
+            ? " "
             : hoverData_[0] + ""}
-          {hoverData_[0] != "ArDrive" ? " " : ""}
-          {hoverData_[0] == "ArDrive"
-            ? "Click to download feature file.."
+          {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
+            ? ""
+            : showNews_
+            ? ""
+            : hoverData_[0] == "" && hoverData_[1] == 0
+            ? ""
+            : hoverData_[0] == "display"
+            ? ""
+            : hoverData_[0] == "news"
+            ? ""
+            : hoverData_[0] == "expand"
+            ? ""
+            : hoverData_[0] != "ArDrive"
+            ? ""
+            : " "}{" "}
+          {dash_
+            ? "Activate Dashboard"
+            : hoverData_[0] == "dashboard"
+            ? "Deactivate Dashboard"
+            : hoverData_[0] == "dashboard0"
+            ? 
+            currentData_ == 'tag' && hoverData_[1] == -99 ? 'Currently viewing tag' :
+            currentData_ == 'type' && hoverData_[1] == -98 ? 'Currently viewing type' :
+            currentData_ == 'platform' && hoverData_[1] == -97 ? 'Currently viewing platform' :
+            currentData_ == 'network' && hoverData_[1] == -96 ? 'Currently viewing network' 
+            :
+            (`Switch to ${
+              hoverData_[1] == -99 ?
+              'tag'
+              :
+              hoverData_[1] == -98 ?
+              'type'
+              :
+              hoverData_[1] == -97 ?
+              'platform'
+              :
+              hoverData_[1] == -96 ?
+              'network' : ''
+            }..`)
+            : showNews_
+            ? "Latest Arweave News"
+            : hoverData_[0] == "" && hoverData_[1] == 0
+            ? ""
+            : hoverData_[0] == "display"
+            ? `Switch to ${!viewQR_ ? "QRCode" : "DP"}`
+            : hoverData_[0] == "ArDrive"
+            ? "Download feature file"
+            : hoverData_[0] == "news"
+            ? `Latest Arweave News`
+            : hoverData_[0] == "expand"
+            ? `Switch cover`
             : hoverData_[1].toString().includes(".")
             ? "in fees"
             : hoverData_[1] > 1
             ? "transactions"
             : "transaction"}
         </p>
-
-        <div
-          className={`cursor-pointer ${
-            isDark_ ? "text-white" : "text-black"
-          } ml-2 flex flex-row min-w-2 absolute left-0 text-[12px] font-thin transition-all duration-300`}
-          onClick={() => {}}
-        >
-          {/* Dashboard Switch */}
-          <p
-            className={`m-2 cursor-pointer hover:opacity-70 ${
-              viewSwitch_
-                ? "duration-[1000ms] opacity-30"
-                : "duration-[1000ms] opacity-0"
-            }`}
-            onClick={() => {
-              setCurrentANFT_(-1);
-              dash_ ? setDash_(false) : setDash_(true);
-            }}
-          >
-            {dash_ ? "Transactions" : "Assets"}
-          </p>
-
-          {/* <p className={`m-2 cursor-pointer hover:opacity-70 ${
-            viewSwitch_
-              ? "duration-[1000ms] opacity-30"
-              : "duration-[1000ms] opacity-0"
-          }`} onClick={() => {
-            setIsDark_(!isDark_)
-          }}>
-            {
-            isDark_ ?
-              'Light'
-              :
-              'Dark'
-          }
-          </p> */}
-        </div>
       </div>
 
       <div
@@ -572,10 +680,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           setViewSwitch_(!viewSwitch_);
         }}
         onMouseEnter={() => {
-          return setViewItem_("expand");
+          return setHoverData_(["expand", 0]);
         }}
         onMouseLeave={() => {
-          return setViewItem_("");
+          return setHoverData_(["", 0]);
         }}
       >
         {/* Important User Control */}
@@ -586,32 +694,82 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         className={`w-[100px] h-[20px] text-center font-medium text-[12px] ${
           isDark_ ? "text-white/40" : "text-black/60"
         } flex flex-col justify-center ${
-          viewItem_ != "" ? "opacity-100 bottom-[40px] duration-200" : "opacity-0 bottom-[45px] duration-600"
-        } absolute right-[-13px] transition-all`}
+          viewItem_ != ""
+            ? "opacity-100 bottom-[37px] duration-200"
+            : "opacity-0 bottom-[45px] duration-600"
+        } absolute right-[-15px] transition-all`}
       >
-        {viewItem_ == "expand" ? "Expand" : "Share"}
+        {viewItem_ == "expand" ? "Expand" : viewItem_ == "news" ? "News" : ""}
       </div>
 
       <div
-        className={`min-h-[20px] w-[24px] absolute bottom-[8.5px] right-[35px] flex flex-row ${!viewSwitch_ ? 'opacity-0 duration-200 pointer-events-none' : 'opacity-100 duration-600 pointer-events-auto'} transition-all`}
+        className={`min-h-[20px] w-[24px] absolute bottom-[8.5px] left-[45px] flex flex-row ${
+          !viewSwitch_
+            ? "opacity-0 duration-200 pointer-events-none"
+            : "opacity-100 duration-600 pointer-events-auto"
+        } transition-all`}
       >
         <div
-          className={`w-[20px] hover:w-[20px] cursor-pointer duration-200 transition-all m-[4px] flex flex-row relative overflow-hidden opacity-90 hover:opacity-70`}
+          className={`w-[21px] hover:w-[21px] cursor-pointer duration-200 transition-all m-[2px] flex flex-row relative overflow-hidden opacity-90 hover:opacity-70`}
           onMouseEnter={() => {
-            return setViewItem_("share");
+            return setHoverData_(["news", 0]);
           }}
           onMouseLeave={() => {
-            return setViewItem_("");
+            return setHoverData_(["", 0]);
+          }}
+          onClick={() => {
+            setShowNews_(!showNews_);
           }}
         >
           <FontAwesomeIcon
-            icon={faQrcode}
+            icon={faScroll}
             className={`text-center duration-[200ms] transition-all ${
               isDark_
                 ? "hover:text-white text-white"
                 : "hover:text-black text-black"
-            } w-[20px] h-[20px]`}
+            } w-[21px] h-[21px]`}
           />
+        </div>
+      </div>
+      <div
+        className={`min-h-[20px] w-[24px] absolute bottom-[8.5px] left-[15px] flex flex-row ${
+          !viewSwitch_
+            ? "opacity-0 duration-200 pointer-events-none"
+            : "opacity-100 duration-600 pointer-events-auto"
+        } transition-all`}
+      >
+        <div
+          className={`w-[21px] hover:w-[21px] cursor-pointer duration-200 transition-all m-[2px] flex flex-row relative overflow-hidden opacity-90 hover:opacity-70`}
+          onMouseEnter={() => {
+            return setHoverData_(["dashboard", 0]);
+          }}
+          onMouseLeave={() => {
+            return setHoverData_(["", 0]);
+          }}
+          onClick={() => {
+            setCurrentANFT_(-1);
+            dash_ ? setDash_(false) : setDash_(true);
+          }}
+        >
+          {dash_ ? (
+            <FontAwesomeIcon
+              icon={faPieChart}
+              className={`text-center duration-[200ms] transition-all ${
+                isDark_
+                  ? "hover:text-white text-white"
+                  : "hover:text-black text-black"
+              } w-[21px] h-[21px]`}
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faAngleLeft}
+              className={`text-center duration-[200ms] transition-all ${
+                isDark_
+                  ? "hover:text-white text-white"
+                  : "hover:text-black text-black"
+              } w-[21px] h-[21px]`}
+            />
+          )}
         </div>
       </div>
     </div>

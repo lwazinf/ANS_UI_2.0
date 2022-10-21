@@ -109,7 +109,6 @@ const Visuals = ({ data }: VisualsProps) => {
   };
 
   useEffect(() => {
-
     // First Chart // // // // // // // // // // // //
 
     const refAccess0 = select(svgRef0.current)
@@ -294,6 +293,12 @@ const Visuals = ({ data }: VisualsProps) => {
             onClick={() => {
               setCurrentData_("tag");
             }}
+            onMouseEnter={() => {
+              setHoverData_(['dashboard0', -99])
+            }}
+            onMouseLeave={() => {
+              setHoverData_(['', 0])
+            }}
             id={`tag_`}
           >
             Tag
@@ -321,6 +326,12 @@ const Visuals = ({ data }: VisualsProps) => {
             } duration-300 transition-all _displayFont1 font-[100]`}
             onClick={() => {
               setCurrentData_("network");
+            }}
+            onMouseEnter={() => {
+              setHoverData_(['dashboard0', -96])
+            }}
+            onMouseLeave={() => {
+              setHoverData_(['', 0])
             }}
             id={`network_`}
           >
@@ -350,6 +361,12 @@ const Visuals = ({ data }: VisualsProps) => {
             onClick={() => {
               setCurrentData_("type");
             }}
+            onMouseEnter={() => {
+              setHoverData_(['dashboard0', -98])
+            }}
+            onMouseLeave={() => {
+              setHoverData_(['', 0])
+            }}
             id={`type_`}
           >
             Type
@@ -376,6 +393,12 @@ const Visuals = ({ data }: VisualsProps) => {
             } duration-300 transition-all _displayFont1 font-[100]`}
             onClick={() => {
               setCurrentData_("platform");
+            }}
+            onMouseEnter={() => {
+              setHoverData_(['dashboard0', -97])
+            }}
+            onMouseLeave={() => {
+              setHoverData_(['', 0])
             }}
             id={`platform_`}
           >
@@ -435,15 +458,25 @@ const Visuals = ({ data }: VisualsProps) => {
           className={`text-[20px] w-[200px] ${
             isDark_ ? "text-white/70" : "text-black"
           } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
-            hoverData_[0] == 0 || hoverData_[0] == 'ArDrive'
+            hoverData_[0] == 0 ||
+            hoverData_[0] == "ArDrive" ||
+            hoverData_[0] == "display" ||
+            hoverData_[0] == "dashboard0" ||
+            hoverData_[0] == "dashboard" ||
+            hoverData_[0] == "news" ||
+            hoverData_[0] == "expand"
               ? "opacity-30 duration-100 bottom-[-5px]"
               : "opacity-80 duration-100 bottom-[3px]"
           } transition-all`}
         >
-          {
-            hoverData_[0] == 'ArDrive' ?
-            0 : hoverData_[1]
-          }
+          {hoverData_[0] == "ArDrive" ||
+          hoverData_[0] == "display" ||
+            hoverData_[0] == "dashboard0" ||
+            hoverData_[0] == "dashboard" ||
+          hoverData_[0] == "news" ||
+          hoverData_[0] == "expand"
+            ? 0
+            : hoverData_[1]}
         </p>
         <div
           className={`transition-all duration-[1500ms] flex flex-col justify-center items-center ${
@@ -454,15 +487,19 @@ const Visuals = ({ data }: VisualsProps) => {
             className={`text-[17px] min-w-[200px] relative ${
               isDark_ ? "text-white/70" : "text-black"
             }  ${
-              hoverData_[0] == 0 || hoverData_[0] == 'ArDrive'
+              hoverData_[0] == 0 || hoverData_[0] == "ArDrive"
                 ? "opacity-30 duration-100 bottom-[-10px]"
                 : "opacity-80 duration-[1000ms] bottom-[0px]"
             } transition-all text-center pointer-events-none leading-[15px] _displayFont1 font-[100] opacity-60`}
           >
-            {
-            hoverData_[0] == 'ArDrive' ?
-            '' : hoverData_[0]
-          }
+            {hoverData_[0] == "ArDrive" ||
+            hoverData_[0] == "display" ||
+            hoverData_[0] == "dashboard" ||
+            hoverData_[0] == "dashboard0" ||
+            hoverData_[0] == "news" ||
+            hoverData_[0] == "expand"
+              ? ""
+              : hoverData_[0]}
           </p>
         </div>
       </div>

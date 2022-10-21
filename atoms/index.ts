@@ -59,6 +59,11 @@ export const hudAux = atom<boolean>({
     default: false,
 });
 
+export const showNews = atom<boolean>({
+    key: 'showNews',
+    default: false,
+});
+
 export const hoverData = atom({
     key: 'hoverData',
     default: ['', 0],
