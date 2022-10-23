@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Res } from "../../../src/types";
 import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
 import { useRecoilState } from "recoil";
-import Visuals from "./Visuals";
-import PieChart_ from "./PieChart";
-import BubbleChart_ from "./BubbleChart";
+import Visuals from "./_Visuals";
+import PieChart_ from "./_PieChart";
 const Converter = require("timestamp-conv");
 
 interface DashboardProps {
@@ -284,11 +283,11 @@ const Dashboard = ({ data }: DashboardProps) => {
             return (
               <div
                 key={nft.id}
-                className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all ${
+                className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all duration-200 ${
                   currentANFT_ == i
-                    ? "opacity-100 duration-[500ms] grayscale-0"
-                    : "opacity-80 duration-[200ms] grayscale-[70%]"
-                } hover:opacity-80`}
+                    ? "opacity-80 p-[1px] hover:opacity-100"
+                    : currentANFT_ == -1 ? "opacity-80 p-0 hover:opacity-80" : 'opacity-30 p-0 hover:opacity-80'
+                }`}
                 onClick={() => {
                   if (currentANFT_ == i) {
                     setCurrentANFT_(-1);

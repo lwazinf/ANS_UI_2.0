@@ -15,11 +15,12 @@ import {
   isDarkMode,
   hoverData,
   currentState,
+  showNews,
 } from "../../../atoms";
 import * as d3 from "d3";
 import { drag } from "d3";
 import { values } from "lodash";
-import PieChart_ from "./PieChart";
+import PieChart_ from "./_PieChart";
 import { height } from "@mui/system";
 
 interface VisualsProps {
@@ -28,6 +29,8 @@ interface VisualsProps {
 
 const Visuals = ({ data }: VisualsProps) => {
   const [currentData_, setCurrentData_] = useRecoilState(currentState);
+
+  const [showNews_, setShowNews_] = useRecoilState(showNews);
 
   const [piePerc_, setPiePerc_] = useState(0);
 
@@ -177,7 +180,11 @@ const Visuals = ({ data }: VisualsProps) => {
             return radiusScale(parseFloat(d.fee) * 8000);
           });
 
-        setHoverData_(["", 0]);
+        if (!showNews_) {
+          setHoverData_(["", 0]);
+        } else {
+          setHoverData_(["news", 0]);
+        }
       });
 
     function dragstarted(event, node) {
@@ -294,10 +301,14 @@ const Visuals = ({ data }: VisualsProps) => {
               setCurrentData_("tag");
             }}
             onMouseEnter={() => {
-              setHoverData_(['dashboard0', -99])
+              setHoverData_(["dashboard0", -99]);
             }}
             onMouseLeave={() => {
-              setHoverData_(['', 0])
+              if (!showNews_) {
+                setHoverData_(["", 0]);
+              } else {
+                setHoverData_(["news", 0]);
+              }
             }}
             id={`tag_`}
           >
@@ -328,10 +339,14 @@ const Visuals = ({ data }: VisualsProps) => {
               setCurrentData_("network");
             }}
             onMouseEnter={() => {
-              setHoverData_(['dashboard0', -96])
+              setHoverData_(["dashboard0", -96]);
             }}
             onMouseLeave={() => {
-              setHoverData_(['', 0])
+              if (!showNews_) {
+                setHoverData_(["", 0]);
+              } else {
+                setHoverData_(["news", 0]);
+              }
             }}
             id={`network_`}
           >
@@ -362,10 +377,14 @@ const Visuals = ({ data }: VisualsProps) => {
               setCurrentData_("type");
             }}
             onMouseEnter={() => {
-              setHoverData_(['dashboard0', -98])
+              setHoverData_(["dashboard0", -98]);
             }}
             onMouseLeave={() => {
-              setHoverData_(['', 0])
+              if (!showNews_) {
+                setHoverData_(["", 0]);
+              } else {
+                setHoverData_(["news", 0]);
+              }
             }}
             id={`type_`}
           >
@@ -395,10 +414,14 @@ const Visuals = ({ data }: VisualsProps) => {
               setCurrentData_("platform");
             }}
             onMouseEnter={() => {
-              setHoverData_(['dashboard0', -97])
+              setHoverData_(["dashboard0", -97]);
             }}
             onMouseLeave={() => {
-              setHoverData_(['', 0])
+              if (!showNews_) {
+                setHoverData_(["", 0]);
+              } else {
+                setHoverData_(["news", 0]);
+              }
             }}
             id={`platform_`}
           >
@@ -459,7 +482,7 @@ const Visuals = ({ data }: VisualsProps) => {
             isDark_ ? "text-white/70" : "text-black"
           } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
             hoverData_[0] == 0 ||
-            hoverData_[0] == "ArDrive" ||
+            hoverData_[0] == "ario" ||
             hoverData_[0] == "display" ||
             hoverData_[0] == "dashboard0" ||
             hoverData_[0] == "dashboard" ||
@@ -469,10 +492,10 @@ const Visuals = ({ data }: VisualsProps) => {
               : "opacity-80 duration-100 bottom-[3px]"
           } transition-all`}
         >
-          {hoverData_[0] == "ArDrive" ||
+          {hoverData_[0] == "ario" ||
           hoverData_[0] == "display" ||
-            hoverData_[0] == "dashboard0" ||
-            hoverData_[0] == "dashboard" ||
+          hoverData_[0] == "dashboard0" ||
+          hoverData_[0] == "dashboard" ||
           hoverData_[0] == "news" ||
           hoverData_[0] == "expand"
             ? 0
@@ -492,7 +515,7 @@ const Visuals = ({ data }: VisualsProps) => {
                 : "opacity-80 duration-[1000ms] bottom-[0px]"
             } transition-all text-center pointer-events-none leading-[15px] _displayFont1 font-[100] opacity-60`}
           >
-            {hoverData_[0] == "ArDrive" ||
+            {hoverData_[0] == "ario" ||
             hoverData_[0] == "display" ||
             hoverData_[0] == "dashboard" ||
             hoverData_[0] == "dashboard0" ||

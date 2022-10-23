@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import * as d3 from "d3";
 import { useRecoilState } from "recoil";
-import { currentState, hoverData, hudAux } from "../../../atoms";
+import { currentState, hoverData, hudAux, showNews } from "../../../atoms";
 
 interface PieChart_Props {}
 
 const Arc = ({ arcData }: any) => {
-  
-    const tag_ = {
+  const tag_ = {
     collectible: "blue",
     transaction: "lightblue",
     exchange: "gray",
@@ -44,7 +43,8 @@ const Arc = ({ arcData }: any) => {
   const [pieData0_, setPieData0_] = useState(0);
   const [pieData1_, setPieData1_] = useState("");
   const [hoverData_, setHoverData_] = useRecoilState(hoverData);
-    const [hudAux_, setHudAux_] = useRecoilState(hudAux);
+  const [hudAux_, setHudAux_] = useRecoilState(hudAux);
+  const [showNews_, setShowNews_] = useRecoilState(showNews);
 
   let w1 = 302;
   let h1 = 412;
@@ -56,8 +56,12 @@ const Arc = ({ arcData }: any) => {
 
   const arc = d3
     .arc()
-    .innerRadius(radius * 0.4 + (hoverData_[0] == arcData.data[0] ? radiusAux_ : -5))
-    .outerRadius(radius * 0.7 + (hoverData_[0] == arcData.data[0] ? radiusAux_ : -5));
+    .innerRadius(
+      radius * 0.4 + (hoverData_[0] == arcData.data[0] ? radiusAux_ : -5)
+    )
+    .outerRadius(
+      radius * 0.7 + (hoverData_[0] == arcData.data[0] ? radiusAux_ : -5)
+    );
 
   const getColor = () => {
     return currentState_ == "tag"
@@ -70,19 +74,23 @@ const Arc = ({ arcData }: any) => {
   };
 
   const mouseOver = (data_) => {
-    setradiusAux_(5)
+    setradiusAux_(5);
     setHudAux_(!hudAux_);
-    setPieData0_(data_.data[1])
-    setPieData1_(data_.data[0])
-    setHoverData_(data_.data)
+    setPieData0_(data_.data[1]);
+    setPieData1_(data_.data[0]);
+    setHoverData_(data_.data);
   };
 
   const mouseOut = () => {
-    setradiusAux_(0)
+    setradiusAux_(0);
     setHudAux_(!hudAux_);
-    setPieData0_(0)
-    setPieData1_('')
-    setHoverData_(["", 0])
+    setPieData0_(0);
+    setPieData1_("");
+    if (!showNews_) {
+      setHoverData_(["", 0]);
+    } else {
+      setHoverData_(["news", 0]);
+    }
   };
 
   const getMap = (_currentData) => {
@@ -101,11 +109,15 @@ const Arc = ({ arcData }: any) => {
 
   return (
     <path
-      className={`${pieData1_ == arcData.data[0] || hoverData_[0] == arcData.data[0] ? 'opacity-100' : 'opacity-60'} transition-all duration-100`}
+      className={`${
+        pieData1_ == arcData.data[0] || hoverData_[0] == arcData.data[0]
+          ? "opacity-100"
+          : "opacity-60"
+      } transition-all duration-100`}
       d={arc(arcData)}
       fill={getColor()}
       onMouseOver={() => {
-        mouseOver(arcData)
+        mouseOver(arcData);
       }}
       onMouseOut={mouseOut}
     />
@@ -113,7 +125,7 @@ const Arc = ({ arcData }: any) => {
 };
 
 const PieChart_ = ({ data, x, y }: PieChart_Props) => {
-    const [percentage_, setPercentage_] = useState(0)
+  const [percentage_, setPercentage_] = useState(0);
   const pie = d3
     .pie()
     .startAngle(0)
@@ -155,15 +167,18 @@ const PieChart_ = ({ data, x, y }: PieChart_Props) => {
     }
     return result_;
   };
-  
-  useEffect(() => {
-    setPercentage_(0)
 
-    d3.selection().transition('pie-reveal').duration(3000).tween('Percentage_', () => {
-        const percentInterpolate = d3.interpolate(percentage_, 100)
-        return t => setPercentage_(percentInterpolate(t))
-    })
-  }, [data])
+  useEffect(() => {
+    setPercentage_(0);
+
+    d3.selection()
+      .transition("pie-reveal")
+      .duration(3000)
+      .tween("Percentage_", () => {
+        const percentInterpolate = d3.interpolate(percentage_, 100);
+        return (t) => setPercentage_(percentInterpolate(t));
+      });
+  }, [data]);
   return (
     <g transform={`translate(${x}, ${y})`}>
       {pie(getMap(currentState_)).map((d) => {

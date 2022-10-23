@@ -11,8 +11,8 @@ import { Divider, LoadingOrNotFound } from './components/reusables';
 import CoverPage from './components/CoverPage';
 import { Koii, ArweaveTransaction } from '../../src/types';
 import { Toaster } from 'react-hot-toast';
-import ProfileHUD from './components/ProfileHUD';
-import Dashboard from './components/Dashboard';
+import ProfileHUD from './components/_ProfileHUD';
+import Dashboard from './components/_Dashboard';
 
 function PageContent(props: userInfo) {
   const bio = typeof props.userInfo.bio === 'string' ? 
