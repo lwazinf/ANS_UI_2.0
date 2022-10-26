@@ -27,9 +27,7 @@ import {
 } from "../../../atoms";
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
-import * as htmlToImage from "html-to-image";
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
-import download from "downloadjs";
+import TwitterFeed_ from "../TwitterAPI_";
 
 interface ProfileHUDProps {
   data: Res | undefined;
@@ -100,11 +98,25 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         } transition-all`}
       />
 
+      <div
+        className={`w-full h-full flex flex-row justify-center items-center ${
+          isDark_ ? "text-white" : "text-black"
+        } text-[12px] font-thin absolute top-0 left-0
+        transition-all ${
+          showNews_
+            ? "opacity-100 duration-[1000ms]"
+            : "opacity-0 duration-[100ms]"
+        }`}
+      >
+        {/* <TwitterFeed_/> */}
+      </div>
+
       {/* Arweave Logo */}
       <a
-        href={`https://arwiki.wiki/#/en/category/the_arweave_project`}
-        target={"_blank"}
-        rel={"noreferrer"}
+        // href={`https://arwiki.wiki/#/en/category/the_arweave_project`}
+        href={`#`}
+        // target={"_blank"}
+        // rel={"noreferrer"}
         className={`absolute top-[-10px] left-[10px] z-10`}
       >
         <img
@@ -116,11 +128,13 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
               : "duration-[400ms] opacity-20"
           } transition-all`}
           src={`/ProfileHUD/ar_logo.png`}
+          onClick={async () => {
+          }}
         />
       </a>
 
       {/* BackDrop Layer */}
-      <div className={`w-full h-full absolute top-0 p-[15px]`}>
+      <div className={`w-full h-full absolute top-0 p-[15px] ml-[-30px]`}>
         <div
           className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
         >
@@ -143,9 +157,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                   : "duration-[100ms] opacity-70"
               }`}
             >
-              {hoverData_[0] == "expand"
-                ? "expand".toUpperCase()
-                : data
+              {data
                 ? data.ANS.nickname.toUpperCase()
                 : ""}
             </p>
@@ -154,12 +166,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       </div>
 
       {/* NickName Placeholder */}
-      <div className={`w-full h-full absolute top-0 p-[15px]`}>
+      <div className={`w-full h-full absolute top-0 p-[15px] ml-[-30px]`}>
         <div
           className={`absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90`}
         >
           <div
-            className={`transition-all duration-[200ms] min-w-[50px] h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
+            className={`transition-all duration-[200ms] w-full h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
         ${!viewSwitch_ ? "opacity-0" : "opacity-100"} relative`}
           >
             <div
@@ -225,7 +237,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           showNews_
             ? "duration-200 opacity-5 top-[-140px] pointer-events-none"
             : "duration-700 opacity-100 top-[0px] pointer-events-auto"
-        } transition-all flex flex-row justify-center items-center`}
+        } transition-all flex flex-row justify-center items-center pr-[30px]`}
       >
         <div
           className={`w-full h-full absolute top-0 pl-[245px] flex flex-row justify-center items-center transition-all`}
@@ -242,10 +254,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] transition-all my-[4px] flex flex-row relative overflow-hidden ${
                 hoverData_[0] == "" ||
-                hoverData_[0] == "ario" ||
+                hoverData_[0] == "ardrive" ||
                 hoverData_[0] == "display" ||
                 hoverData_[0] == "news" ||
-                hoverData_[0] == "expand"  ||
+                hoverData_[0] == "expand" ||
                 hoverData_[0] == "dashboard"
                   ? "opacity-100"
                   : "opacity-80"
@@ -280,11 +292,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[20px] hover:w-[120px] cursor-default duration-[200ms] transition-all ${
                 hoverData_[0] == "" ||
-                hoverData_[0] == "ario" ||
+                hoverData_[0] == "ardrive" ||
                 hoverData_[0] == "display" ||
                 hoverData_[0] == "news" ||
-                hoverData_[0] == "expand"  ||
-                hoverData_[0] == "dashboard" 
+                hoverData_[0] == "expand" ||
+                hoverData_[0] == "dashboard"
                   ? "opacity-100"
                   : "opacity-80"
               } my-[4px] flex flex-row relative overflow-hidden`}
@@ -308,10 +320,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[20px] hover:w-[120px] cursor-pointer duration-[200ms] ${
                 hoverData_[0] == "" ||
-                hoverData_[0] == "ario" ||
+                hoverData_[0] == "ardrive" ||
                 hoverData_[0] == "display" ||
                 hoverData_[0] == "news" ||
-                hoverData_[0] == "expand"  ||
+                hoverData_[0] == "expand" ||
                 hoverData_[0] == "dashboard"
                   ? "opacity-100"
                   : "opacity-80"
@@ -346,10 +358,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             <div
               className={`w-[20px] hover:w-[120px] ${
                 hoverData_[0] == "" ||
-                hoverData_[0] == "ario" ||
+                hoverData_[0] == "ardrive" ||
                 hoverData_[0] == "display" ||
                 hoverData_[0] == "news" ||
-                hoverData_[0] == "expand"  ||
+                hoverData_[0] == "expand" ||
                 hoverData_[0] == "dashboard"
                   ? "opacity-100"
                   : "opacity-80"
@@ -506,7 +518,11 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       </div>
 
       <div
-        className={`absolute bottom-4 w-full h-[15px] flex flex-row justify-center items-center`}
+        className={`absolute bottom-4 w-full h-[15px] flex flex-row justify-center items-center ${
+          viewSwitch_
+            ? "duration-[600ms] opacity-100"
+            : "duration-[200ms] opacity-0"
+        }`}
       >
         {/* User's Address */}
         <div
@@ -538,12 +554,12 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
 
         <p
           className={`${
-            isDark_ ? "text-white" : "text-black"
-          } text-[12px] font-thin text-white/60 p-0 ${
+            isDark_ ? "text-white/60" : "text-black/60"
+          } text-[12px] font-thin p-0 ${
             hoverData_[0] != "" || showNews_
               ? "opacity-100 duration-[800ms] top-[-2px]"
               : "opacity-0 duration-[50ms] top-[-10px]"
-          } text-[12px] text-center transition-all absolute pl-[30px] w-full`}
+          } text-[12px] text-center transition-all absolute w-full`}
         >
           {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
             ? ""
@@ -557,7 +573,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             ? ""
             : hoverData_[0] == "expand"
             ? ""
-            : hoverData_[0] != "ario"
+            : hoverData_[0] != "ardrive"
             ? hoverData_[1]
             : ""}
           {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
@@ -572,7 +588,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             ? ""
             : hoverData_[0] == "expand"
             ? ""
-            : hoverData_[0] != "ario"
+            : hoverData_[0] != "ardrive"
             ? " "
             : ""}
           {hoverData_[0] == "dashboard" || hoverData_[0] == "dashboard0"
@@ -583,7 +599,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             ? ""
             : hoverData_[0] == "display"
             ? ""
-            : hoverData_[0] == "ario"
+            : hoverData_[0] == "ardrive"
             ? ""
             : hoverData_[0] == "news"
             ? ""
@@ -608,7 +624,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             ? ""
             : hoverData_[0] == "expand"
             ? ""
-            : hoverData_[0] != "ario"
+            : hoverData_[0] != "ardrive"
             ? ""
             : " "}{" "}
           {hoverData_[0] == "" && hoverData_[1] == 0
@@ -637,7 +653,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 }..`
             : hoverData_[0] == "display"
             ? `Switch to ${!viewQR_ ? "QRCode" : "DP"}`
-            : hoverData_[0] == "ario"
+            : hoverData_[0] == "ardrive"
             ? "Download feature file"
             : hoverData_[0] == "expand"
             ? `Switch cover`
@@ -692,16 +708,16 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       </div>
 
       <div
-        className={`min-h-[23px] w-[24px] absolute bottom-[8.5px] left-[73px] flex flex-row ${
+        className={`min-h-[23px] w-[28px] absolute bottom-[8.5px] left-[75px] flex flex-row ${
           !viewSwitch_
             ? "opacity-0 duration-200 pointer-events-none"
             : "opacity-100 duration-600 pointer-events-auto"
         } transition-all`}
       >
         <div
-          className={`w-[23px] hover:w-[23px] cursor-pointer duration-200 transition-all m-[2px] flex flex-row relative overflow-hidden opacity-100 hover:opacity-70`}
+          className={`w-[28px] hover:w-[28px] cursor-pointer duration-200 transition-all m-[2px] flex flex-row relative overflow-hidden opacity-100 hover:opacity-70`}
           onMouseEnter={() => {
-            return setHoverData_(["ario", 0]);
+            return setHoverData_(["ardrive", 0]);
           }}
           onMouseLeave={() => {
             if (!showNews_) {
@@ -712,9 +728,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           }}
         >
           <img
-            src={"/ProfileHUD/elephant-light.png"}
-            alt={`ario Logo`}
-            className={`h-[23px] object-cover opacity-100 hover:opacity-80 duration-400 transition-all cursor-pointer`}
+            src={"https://ardrive.io/wp-content/uploads/2022/09/ArDrive-Logo-Wordmark-Dark-PS1600-768x174.png"}
+            alt={`ardrive Logo`}
+            className={`h-[20px] w-[28px] object-cover opacity-100 hover:opacity-80 duration-400 transition-all cursor-pointer object-left`}
           />
         </div>
       </div>

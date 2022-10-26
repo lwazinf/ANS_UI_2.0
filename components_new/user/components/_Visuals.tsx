@@ -293,7 +293,7 @@ const Visuals = ({ data }: VisualsProps) => {
         >
           <div
             className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
+              isDark_ ? "text-white/80" : "text-black"
             } flex flex-col justify-center hover:opacity-100 ${
               currentData_ == "tag" ? "opacity-100" : "opacity-0"
             } duration-300 transition-all _displayFont1 font-[100]`}
@@ -319,7 +319,7 @@ const Visuals = ({ data }: VisualsProps) => {
             className={`text-center duration-[200ms] transition-all ${
               isDark_
                 ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
+                : "hover:text-black text-black"
             } w-[20px] h-[20px]`}
           />
         </div>
@@ -331,7 +331,7 @@ const Visuals = ({ data }: VisualsProps) => {
         >
           <div
             className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
+              isDark_ ? "text-white/80" : "text-black"
             } flex flex-col justify-center hover:opacity-100 ${
               currentData_ == "network" ? "opacity-100" : "opacity-0"
             } duration-300 transition-all _displayFont1 font-[100]`}
@@ -357,7 +357,7 @@ const Visuals = ({ data }: VisualsProps) => {
             className={`text-center duration-[200ms] transition-all ${
               isDark_
                 ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
+                : "hover:text-black text-black"
             } w-[20px] h-[20px]`}
           />
         </div>
@@ -369,7 +369,7 @@ const Visuals = ({ data }: VisualsProps) => {
         >
           <div
             className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
+              isDark_ ? "text-white/80" : "text-black"
             } flex flex-col justify-center hover:opacity-100 ${
               currentData_ == "type" ? "opacity-100" : "opacity-0"
             } duration-300 transition-all _displayFont1 font-[100]`}
@@ -395,7 +395,7 @@ const Visuals = ({ data }: VisualsProps) => {
             className={`text-center duration-[200ms] transition-all ${
               isDark_
                 ? "hover:text-white text-white/80"
-                : "hover:text-black text-black/80"
+                : "hover:text-black text-black"
             } w-[20px] h-[20px]`}
           />
         </div>
@@ -406,7 +406,7 @@ const Visuals = ({ data }: VisualsProps) => {
         >
           <div
             className={`w-[100px] h-full absolute left-0 pl-[30px] font-medium text-[15px] ${
-              isDark_ ? "text-white/80" : "text-black/80"
+              isDark_ ? "text-white/80" : "text-black"
             } flex flex-col justify-center hover:opacity-100 ${
               currentData_ == "platform" ? "opacity-100" : "opacity-0"
             } duration-300 transition-all _displayFont1 font-[100]`}
@@ -482,7 +482,7 @@ const Visuals = ({ data }: VisualsProps) => {
             isDark_ ? "text-white/70" : "text-black"
           } text-center pointer-events-none leading-[15px] _displayFont1 font-[600] relative ${
             hoverData_[0] == 0 ||
-            hoverData_[0] == "ario" ||
+            hoverData_[0] == "ardrive" ||
             hoverData_[0] == "display" ||
             hoverData_[0] == "dashboard0" ||
             hoverData_[0] == "dashboard" ||
@@ -492,7 +492,7 @@ const Visuals = ({ data }: VisualsProps) => {
               : "opacity-80 duration-100 bottom-[3px]"
           } transition-all`}
         >
-          {hoverData_[0] == "ario" ||
+          {hoverData_[0] == "ardrive" ||
           hoverData_[0] == "display" ||
           hoverData_[0] == "dashboard0" ||
           hoverData_[0] == "dashboard" ||
@@ -515,7 +515,7 @@ const Visuals = ({ data }: VisualsProps) => {
                 : "opacity-80 duration-[1000ms] bottom-[0px]"
             } transition-all text-center pointer-events-none leading-[15px] _displayFont1 font-[100] opacity-60`}
           >
-            {hoverData_[0] == "ario" ||
+            {hoverData_[0] == "ardrive" ||
             hoverData_[0] == "display" ||
             hoverData_[0] == "dashboard" ||
             hoverData_[0] == "dashboard0" ||
