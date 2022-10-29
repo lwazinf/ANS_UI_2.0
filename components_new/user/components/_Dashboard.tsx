@@ -286,7 +286,7 @@ const Dashboard = ({ data }: DashboardProps) => {
                 className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all duration-200 ${
                   currentANFT_ == i
                     ? "opacity-80 p-[1px] hover:opacity-100"
-                    : currentANFT_ == -1 ? "opacity-80 p-0 hover:opacity-80" : 'opacity-30 p-0 hover:opacity-80'
+                    : currentANFT_ == -1 ? "opacity-80 p-0 hover:opacity-100" : 'opacity-30 p-0 hover:opacity-80'
                 }`}
                 onClick={() => {
                   if (currentANFT_ == i) {

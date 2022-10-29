@@ -12,14 +12,14 @@ module.exports = {
           value: 'public, max-age=31536000, stale-while-revalidate',
       },
   ],
-
-
   },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"]
     });
+
+    // config.resolve.fallback = { fs: false}
   
     return config;
   }

@@ -70,7 +70,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "public/ProfileHUD/Twitter_.js"  ],
   "exclude": [
     "node_modules"
   ]
