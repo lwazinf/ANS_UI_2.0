@@ -64,6 +64,11 @@ export const showNews = atom<boolean>({
     default: false,
 });
 
+export const viewDesc = atom<boolean>({
+    key: 'viewDesc',
+    default: false,
+});
+
 export const hoverData = atom({
     key: 'hoverData',
     default: ['', 0],

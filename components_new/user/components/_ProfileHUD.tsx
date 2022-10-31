@@ -5,13 +5,20 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {
   faAngleLeft,
+  faAngleRight,
+  faArrowLeft,
+  faArrowRight,
   faBacteria,
   faExpand,
   faGlobe,
+  faImage,
+  faPanorama,
   faPieChart,
   faQrcode,
   faScroll,
+  faSliders,
   faStamp,
+  faVrCardboard,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -29,6 +36,7 @@ import {
 import { Res } from "../../../src/types";
 import ProfileBadge from "./modals/ProfileBadge";
 import TwitterNews_ from "../_TwitterAPI";
+const Converter = require("timestamp-conv");
 
 interface ProfileHUDProps {
   data: Res | undefined;
@@ -55,6 +63,26 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [viewQR_, setViewQR_] = useState(true);
   //
   const [viewItem_, setViewItem_] = useState("");
+  const [stampIndex_, setStampIndex_] = useState(0);
+
+  const stamps_ = data
+    ? data.STAMPS.filter((d) => d.stampedAssetType == "image")
+    : [];
+
+  const months_ = {
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec",
+  };
 
   return (
     <div
@@ -67,14 +95,15 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       userCard
       `}
     >
+      
       {/* 👇👇👇 Cover Photo.. could be used for personal branding (user) or as advertising space (AR.PAGE) */}
       <img
         className={`
         w-full h-full object-cover absolute top-0 saturate-[1]
         ${
           viewSwitch_
-            ? "opacity-60 duration-[400ms]"
-            : "opacity-100 duration-[800ms]"
+            ? "opacity-60 duration-[800ms]"
+            : "opacity-0 duration-[800ms]"
         }
         transition-all
         `}
@@ -83,18 +112,35 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         `}
       />
 
+<img
+        className={`
+        w-full h-full object-cover absolute top-0 saturate-[1]
+        ${
+          !viewSwitch_
+            ? "opacity-80 duration-[800ms]"
+            : "opacity-0 duration-[800ms]"
+        }
+        transition-all
+        `}
+        src={`
+        https://images.pexels.com/photos/709237/pexels-photo-709237.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2
+        `}
+      />
+
       {/* 👇👇👇 Blur cover.. blurs the background for better focus on foreground elements */}
       <div
         className={`
         w-full h-full 
-        ${isDark_ ? "bg-black/30" : "bg-white/30"} 
-        backdrop-blur-sm absolute top-0 left-0 
         ${
-          viewSwitch_
-            ? "opacity-100 duration-[400ms]"
-            : "opacity-0 duration-[800ms]"
+          isDark_
+            ? viewSwitch_
+              ? "bg-black/5"
+              : "bg-black/80"
+            : viewSwitch_
+            ? "bg-white/5"
+            : "bg-white/80"
         } 
-        transition-all
+        absolute top-0 left-0 opacity-100 duration-[400ms] backdrop-blur-sm transition-all
       `}
       />
 
@@ -130,6 +176,90 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         <TwitterNews_ />
       </div>
 
+      <div
+        className={`text-white w-full h-full flex flex-row justify-center items-center relative left-[123px] transition-all duration-400
+        `}
+      >
+        <div
+          className={`w-[120px] h-[120px] flex flex-row justify-center items-center overflow-hidden relative ${viewSwitch_ ? 'pointer-events-auto z-0' : 'pointer-events-none z-10'}`}
+        >
+          {data ? (
+            <img
+              className={`w-full h-full object-cover absolute top-0 right-0 transition-all
+                  ${viewSwitch_ ? "opacity-0" : "opacity-100"}
+                  `}
+              src={`https://arweave.net/${stamps_[stampIndex_].stampedAsset}`}
+              onClick={() => {}}
+            />
+          ) : (
+            <div />
+          )}
+        </div>
+        <div
+          className={`
+              flex flex-col items-left justify-center h-[80px] w-[250px] relative left-[8px] top-[4px]
+              ${
+                viewSwitch_
+                  ? "opacity-0 pointer-events-none duration-[800ms]"
+                  : "opacity-100 pointer-events-auto duration-[400ms]"
+              }
+              `}
+        >
+          {/* 👇👇👇 Stamp Bio */}
+          <p
+            className={`
+                text-[13px] 
+                ${isDark_ ? "text-white/70" : "text-black"} 
+                font-thin m-0 overflow-clip
+                `}
+          >
+            {data ? stamps_[stampIndex_].description : ""}
+          </p>
+
+          {/* 👇👇👇 Stamp Name */}
+          <div
+            className={`
+                relative h-[50px] min-w-[50px] flex flex-row mt-1
+                `}
+          >
+            <p
+              className={`
+                  text-[35px] 
+                  ${isDark_ ? "text-white" : "text-black"} 
+                  font-black mt-[-10px] transition-all duration-200 pointer-events-none truncate overflow-hidden
+                  ${hoverData_[0] == "" ? "opacity-100" : "opacity-100"}
+                  `}
+            >
+              {data ? stamps_[stampIndex_].title : ""}
+            </p>
+            <div
+              className={`
+                  ml-[-5px] transition-all duration-200 
+                  ${viewSwitch_ ? "opacity-0" : "opacity-100"}
+                  `}
+            ></div>
+          </div>
+          <p
+            className={`
+                text-[13px] 
+                ${isDark_ ? "text-white/70" : "text-black"} 
+                font-thin m-0
+                `}
+          >
+            {data ? `Stamp Date: ${new Converter.date(
+              stamps_[stampIndex_].timestamp
+            ).getDay()} ${
+              // @ts-ignore
+              months_[
+                new Converter.date(stamps_[stampIndex_].timestamp)
+                  .getMonth()
+                  .toString()
+              ]
+            }, ${new Converter.date(stamps_[stampIndex_].timestamp).getYear()}` : ''}
+          </p>
+        </div>
+      </div>
+
       {/* 👇👇👇 Arweave Logo.. takes users to Arweave ArWiki page */}
       <a
         href={`https://arwiki.wiki/#/en/category/the_arweave_project`}
@@ -153,46 +283,6 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           `}
         />
       </a>
-
-      {/* 👇👇👇 Simple HUD nickname element */}
-      <div
-        className={`
-      w-full h-full absolute top-0 p-[15px] ml-[-30px]
-      `}
-      >
-        <div
-          className={`
-          absolute bottom-10 text-white w-full h-[15px] flex flex-row justify-center font-black transition-all duration-300 hover:opacity-90
-          `}
-        >
-          <div
-            className={`
-            ${isDark_ ? "bg-black/40" : "bg-white/40"} 
-            transition-all duration-[200ms] min-w-[50px] h-[20px] flex flex-row justify-center items-center rounded-[2px] p-1
-        ${
-          !viewSwitch_
-            ? "opacity-100 backdrop-blur-sm"
-            : "opacity-0 backdrop-blur-none"
-        }
-        `}
-          >
-            <p
-              className={`
-              cursor-pointer 
-              ${isDark_ ? "text-white" : "text-black"} 
-              text-[15px] font-black transition-all duration-300 hover:opacity-100 
-              ${
-                viewSwitch_
-                  ? "duration-[1500ms] opacity-100"
-                  : "duration-[100ms] opacity-70"
-              }
-              `}
-            >
-              {data ? data.ANS.nickname.toUpperCase() : ""}
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* 👇👇👇 Detailed HUD nickname element */}
       <div
@@ -278,8 +368,10 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                   : showNews_
                   ? "Show Time"
                   : hoverData_[0] == "display"
-                  ? data.ANS.nickname.toUpperCase()
-                  : hoverData_[0].toUpperCase()}
+                  ? // @ts-ignore
+                    data.ANS.nickname.toUpperCase()
+                  : // @ts-ignore
+                    hoverData_[0].toUpperCase()}
               </p>
             </div>
           </div>
@@ -452,6 +544,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 `}
               />
             </div>
+
             <div
               className={`
               w-[20px] hover:w-[120px] 
@@ -511,6 +604,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 ? "top-[0px] duration-[800ms]"
                 : "top-[0px] duration-[200ms]"
             } 
+            ${viewSwitch_ ? "opacity-100" : "opacity-0"}
             transition-all relative
             `}
           >
@@ -523,7 +617,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
           ${
             viewSwitch_
               ? "opacity-80 pointer-events-auto duration-[400ms]"
-              : "opacity-0 pointer-events-none duration-[800ms]"
+              : "opacity-80 pointer-events-none duration-[800ms]"
           }
               `}
               onClick={() => {
@@ -584,13 +678,18 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             ${
               viewSwitch_
                 ? "opacity-100 pointer-events-auto duration-[400ms]"
-                : "opacity-0 pointer-events-none duration-[800ms]"
+                : "opacity-100 pointer-events-none duration-[800ms]"
             }
             `}
           >
             <div
               className={`
               flex flex-col items-left justify-center h-[80px] w-[250px]
+              ${
+                viewSwitch_
+                  ? "opacity-100 pointer-events-auto duration-[400ms]"
+                  : "opacity-0 pointer-events-none duration-[800ms]"
+              }
               `}
             >
               {/* 👇👇👇 Profile Bio */}
@@ -623,7 +722,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                 <div
                   className={`
                   ml-[-5px] transition-all duration-200 
-                  ${hoverData_[0] == "" ? "opacity-100" : "opacity-100"}
+                  ${viewSwitch_ ? "opacity-100" : "opacity-0"}
                   `}
                 >
                   <ProfileBadge
@@ -812,9 +911,9 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
       {/* 👇👇👇 Expand button, HUD bottom right */}
       <div
         className={`
-        absolute right-3 bottom-4 
+        absolute right-3 
         ${isDark_ ? "text-white" : "text-black"} 
-        cursor-pointer w-[15px] h-[15px] transition-all duration-300 opacity-100 hover:opacity-70
+        cursor-pointer w-[15px] h-[15px] bottom-4 transition-all  opacity-100 hover:opacity-70
         `}
         onClick={() => {
           setViewSwitch_(!viewSwitch_);
@@ -831,7 +930,42 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
         }}
       >
         {/* 👇👇👇 Important user control element */}
-        <FontAwesomeIcon icon={faExpand} />
+        { viewSwitch_
+          ? <FontAwesomeIcon icon={faStamp} />
+        : <FontAwesomeIcon icon={faSliders} />}
+      </div>
+
+      {/* 👇👇👇 Stamp UI buttons, HUD bottom right */}
+      <div
+        className={`
+        absolute right-[70px] bottom-4 
+        ${isDark_ ? "text-white" : "text-black"} 
+        cursor-pointer w-[15px] h-[15px] transition-all duration-300 hover:opacity-70
+        ${viewSwitch_ ? 'opacity-0 pointer-events-none' : stampIndex_ == 0 ? 'opacity-50 pointer-events-auto' : 'opacity-100 pointer-events-auto'}
+        `}
+        onClick={() => {
+          if(stampIndex_ != 0){
+            setStampIndex_(stampIndex_ - 1)
+          }
+        }}
+      >
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </div>
+
+      <div
+        className={`
+        absolute right-[45px] bottom-4 
+        ${isDark_ ? "text-white" : "text-black"} 
+        cursor-pointer w-[15px] h-[15px] transition-all duration-300 hover:opacity-70
+        ${viewSwitch_ ? 'opacity-0 pointer-events-none' : stampIndex_ == stamps_.length-1 ? 'opacity-50 pointer-events-auto' : 'opacity-100 pointer-events-auto'}
+        `}
+        onClick={() => {
+          if(stampIndex_ < stamps_.length-1){
+            setStampIndex_(stampIndex_ + 1)
+          }
+        }}
+      >
+        <FontAwesomeIcon icon={faArrowRight} />
       </div>
 
       <div
@@ -975,7 +1109,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
             />
           ) : (
             <FontAwesomeIcon
-              icon={faStamp}
+              icon={faPanorama}
               className={`text-center duration-[200ms] transition-all ${
                 isDark_
                   ? "hover:text-white text-white"

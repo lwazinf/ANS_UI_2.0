@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Res } from "../../../src/types";
-import { extendDash, currentANFT, isDarkMode } from "../../../atoms";
+import { extendDash, currentANFT, isDarkMode, viewDesc } from "../../../atoms";
 import { useRecoilState } from "recoil";
 import Visuals from "./_Visuals";
 import PieChart_ from "./_PieChart";
@@ -10,29 +10,8 @@ interface DashboardProps {
   data: Res | undefined;
 }
 
-const months_ = {
-  "01": "Jan",
-  "02": "Feb",
-  "03": "Mar",
-  "04": "Apr",
-  "05": "May",
-  "06": "Jun",
-  "07": "Jul",
-  "08": "Aug",
-  "09": "Sep",
-  "10": "Oct",
-  "11": "Nov",
-  "12": "Dec",
-};
-
 const Dashboard = ({ data }: DashboardProps) => {
-  const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
-  const [viewDesc_, setViewDesc_] = useState(false);
-  const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
   const [dash_, setDash_] = useRecoilState(extendDash);
-
-  // Everything on this element is Light/Dark theme ready..
-  const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
 
   return (
     <div
@@ -40,9 +19,105 @@ const Dashboard = ({ data }: DashboardProps) => {
         dash_ ? "pr-[1px]" : "pr-[0px]"
       } flex flex-row justify-center items-center mx-auto`}
     >
-      {/* Left Plate */}
+      {/* Left Plate -  analytical components */}
+      <LeftPlate data={data}/>
 
-      <div
+      {/* Right Plate  - asset display area*/}
+      <RightPlate data={data}/>
+      
+    </div>
+  );
+};
+
+export default Dashboard;
+
+// // // // // // LeftPlate // // // // // // 
+
+ interface RightPlateProps {
+  data: Res | undefined;
+ }
+  
+ const RightPlate = ({data} : RightPlateProps) => {
+  const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
+  const [dash_, setDash_] = useRecoilState(extendDash);
+  const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
+  const [viewDesc_, setViewDesc_] = useRecoilState(viewDesc);
+  const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
+  return ( 
+    <div
+        className={`h-[412px] ${
+          dash_ ? "w-[457px] m-1 p-1" : "w-0 m-0 p-0"
+        } transition-all rounded-[4px] relative left-1`}
+      >
+        <div
+          className={`${
+            isDark_ ? "invert" : "invert-0"
+          } h-full w-full scale-y-[-1] _filter opacity-20 transition-all rounded-[4px] absolute top-0 right-0`}
+        ></div>
+        <div
+          className={`w-full h-full rounded-[4px] transition-all duration-200 _container _grid absolute top-0 right-0 m-0 pt-[1px] pl-[1px]`}
+        >
+          {data?.ANFTS.koii.map((nft, i) => {
+            return (
+              <div
+                key={nft.id}
+                className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all duration-200 ${
+                  currentANFT_ == i
+                    ? "opacity-80 p-[1px] hover:opacity-100"
+                    : currentANFT_ == -1
+                    ? "opacity-80 p-0 hover:opacity-100"
+                    : "opacity-30 p-0 hover:opacity-80"
+                }`}
+                onClick={() => {
+                  if (currentANFT_ == i) {
+                    setCurrentANFT_(-1);
+                    setViewDesc_(false);
+                  } else {
+                    setCurrentANFT_(i);
+                    setViewDesc_(false);
+                  }
+                }}
+              >
+                <img
+                  className={`w-full h-full object-cover`}
+                  src={ARWEAVE_URL + nft.id + "&w=3840&q=75"}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+   );
+ }
+
+// // // // // // LeftPlate // // // // // // 
+
+ interface LeftPlateProps {
+  data: Res | undefined;
+ }
+  
+ const LeftPlate = ({data}:LeftPlateProps) => {
+  const [viewDesc_, setViewDesc_] = useRecoilState(viewDesc);
+  const ARWEAVE_URL = "/_next/image?url=https%3A%2F%2Farweave.net%2F";
+  const [dash_, setDash_] = useRecoilState(extendDash);
+  const [currentANFT_, setCurrentANFT_] = useRecoilState(currentANFT);
+  const [isDark_, setIsDark_] = useRecoilState(isDarkMode);
+  const months_ = {
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec",
+  };
+  return ( 
+    <div
         className={`h-[412px] ${
           dash_ ? "w-[452px]" : "w-full"
         } rounded-[4px] transition-all duration-200 overflow-hidden mr-[1px] p-0 _container relative`}
@@ -65,13 +140,12 @@ const Dashboard = ({ data }: DashboardProps) => {
         />
 
         <div
-          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${dash_ ? 'pointer-events-none' : 'pointer-events-auto'}`}
+          className={`w-full h-full absolute top-0 flex flex-row justify-center items-center transition-all duration-400 ${
+            dash_ ? "pointer-events-none" : "pointer-events-auto"
+          }`}
         >
+          {/* @ts-ignore */}
           {data ? <Visuals data={data.RSS3.transactions} /> : <div />}
-
-          {/* {data ? <svg width={200} height={200} className={`absolute left-[140px] top-[110px]`}>
-      <BubbleChart_ data={data.RSS3.transactions} x={200/2} y={200/2}/>
-    </svg> : <div />} */}
 
           {data ? (
             <svg
@@ -84,6 +158,7 @@ const Dashboard = ({ data }: DashboardProps) => {
               } transition-all`}
             >
               <PieChart_
+                // @ts-ignore
                 data={data.RSS3.transactions}
                 x={200 / 2}
                 y={200 / 2}
@@ -114,7 +189,7 @@ const Dashboard = ({ data }: DashboardProps) => {
             <a
               href={`https://koi.rocks/content-detail/${data?.ANFTS.koii[currentANFT_].id}`}
               target={"_blank"}
-                    rel={"noreferrer"}
+              rel={"noreferrer"}
             >
               <p
                 className={`text-[14px] ${
@@ -263,52 +338,5 @@ const Dashboard = ({ data }: DashboardProps) => {
           </div>
         </div>
       </div>
-
-      {/* Right Plate */}
-
-      <div
-        className={`h-[412px] ${
-          dash_ ? "w-[457px] m-1 p-1" : "w-0 m-0 p-0"
-        } transition-all rounded-[4px] relative left-1`}
-      >
-        <div
-          className={`${
-            isDark_ ? "invert" : "invert-0"
-          } h-full w-full scale-y-[-1] _filter opacity-20 transition-all rounded-[4px] absolute top-0 right-0`}
-        ></div>
-        <div
-          className={`w-full h-full rounded-[4px] transition-all duration-200 _container _grid absolute top-0 right-0 m-0 pt-[1px] pl-[1px]`}
-        >
-          {data?.ANFTS.koii.map((nft, i) => {
-            return (
-              <div
-                key={nft.id}
-                className={`w-[145px] h-[145px] overflow-hidden relative rounded-[3px] cursor-pointer flex flex-row justify-center items-center transition-all duration-200 ${
-                  currentANFT_ == i
-                    ? "opacity-80 p-[1px] hover:opacity-100"
-                    : currentANFT_ == -1 ? "opacity-80 p-0 hover:opacity-100" : 'opacity-30 p-0 hover:opacity-80'
-                }`}
-                onClick={() => {
-                  if (currentANFT_ == i) {
-                    setCurrentANFT_(-1);
-                    setViewDesc_(false);
-                  } else {
-                    setCurrentANFT_(i);
-                    setViewDesc_(false);
-                  }
-                }}
-              >
-                <img
-                  className={`w-full h-full object-cover`}
-                  src={ARWEAVE_URL + nft.id + "&w=3840&q=75"}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+   );
+ }
