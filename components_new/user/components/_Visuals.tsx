@@ -7,7 +7,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { select } from "d3-selection";
 import { createRef, useEffect, useRef, useState } from "react";
-import { Bar, Pie } from "react-roughviz";
 import { useRecoilState } from "recoil";
 import {
   extendDash,
@@ -19,9 +18,6 @@ import {
 } from "../../../atoms";
 import * as d3 from "d3";
 import { drag } from "d3";
-import { values } from "lodash";
-import PieChart_ from "./_PieChart";
-import { height } from "@mui/system";
 
 interface VisualsProps {
   data: any;
