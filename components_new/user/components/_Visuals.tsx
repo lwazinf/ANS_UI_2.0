@@ -39,20 +39,20 @@ const Visuals = ({ data }: VisualsProps) => {
   // Made to send dashboard control signal
   const [hudAux_, setHudAux_] = useRecoilState(hudAux);
 
-  const tag_ = {
+  const tag_ : any = {
     collectible: "blue",
     transaction: "lightblue",
     exchange: "gray",
     social: "white",
     governance: "yellow",
   };
-  const network_ = {
+  const network_ : any = {
     ethereum: "yellow",
     xdai: "lightblue",
     polygon: "brown",
     binance_smart_chain: "slategrey",
   };
-  const type_ = {
+  const type_ : any = {
     transfer: "pink",
     mint: "green",
     swap: "gray",
@@ -62,7 +62,7 @@ const Visuals = ({ data }: VisualsProps) => {
     profile: "orangered",
     vote: "red",
   };
-  const platform_ = {
+  const platform_ : any = {
     poap: "purple",
     Snapshot: "orangered",
     OpenSea: "blue",
@@ -83,21 +83,23 @@ const Visuals = ({ data }: VisualsProps) => {
 
   var radius = Math.min(w1, h1) / 2.2;
 
-  let z = data.map((obj) => {
+  let z = data.map((obj : any) => {
     return !isNaN(parseFloat(obj.fee)) ? parseFloat(obj.fee) * 25 : 0;
   });
 
   const getData = (userInput: any) => {
-    let platform__ = [];
-    data.forEach((element) => {
+    let platform__ : any = [];
+    data.forEach((element : any) => {
       platform__.push(element[userInput]);
     });
+    // @ts-ignore
     platform__ = [...new Set(platform__)];
+    // @ts-ignore
     let platformObj = new Map();
-    platform__.forEach((data__) => {
+    platform__.forEach((data__ : any) => {
       platformObj.set(data__, 0);
     });
-    data.forEach((element) => {
+    data.forEach((element : any) => {
       platformObj.set(
         element[userInput],
         platformObj.get(element[userInput]) + 1
@@ -130,10 +132,10 @@ const Visuals = ({ data }: VisualsProps) => {
       .append("circle")
       .style("opacity", "0.6")
       .style("cursor", "pointer")
-      .attr("r", (d) => {
+      .attr("r", (d : any) => {
         return radiusScale(parseFloat(d.fee) * 8000);
       })
-      .attr("fill", (d) => {
+      .attr("fill", (d : any) => {
         if (currentData_ == "tag") {
           return tag_[d.tag];
         } else if (currentData_ == "type") {
@@ -145,14 +147,15 @@ const Visuals = ({ data }: VisualsProps) => {
         }
       })
       .call(
+        // @ts-ignore
         drag().on("start", dragstarted).on("drag", dragged).on("end", dragended)
       )
-      .on("mouseenter", function (d, i) {
+      .on("mouseenter", function (d: any, i: any) {
         d3.select(this)
           .transition()
           .duration(200)
           .style("opacity", "1")
-          .attr("r", (d, i) => {
+          .attr("r", (d : any, i : any) => {
             return radiusScale(parseFloat(d.fee) * 8500);
           });
 
@@ -167,12 +170,12 @@ const Visuals = ({ data }: VisualsProps) => {
         }
       })
       .on("mousemove", function (d, i) {})
-      .on("mouseleave", function (d, i) {
+      .on("mouseleave", function (d: any, i: any) {
         d3.select(this)
           .transition()
           .duration(200)
           .style("opacity", "0.6")
-          .attr("r", (d, i) => {
+          .attr("r", (d: any, i) => {
             return radiusScale(parseFloat(d.fee) * 8000);
           });
 
@@ -183,16 +186,16 @@ const Visuals = ({ data }: VisualsProps) => {
         }
       });
 
-    function dragstarted(event, node) {
+    function dragstarted(event: any, node: any) {
       if (!event.active) simulation.alphaTarget(1).restart();
       (node.fx = node.x), (node.fy = node.y);
     }
 
-    function dragged(event, node) {
+    function dragged(event: any, node: any) {
       (node.fx = event.x), (node.fy = event.y);
     }
 
-    function dragended(event, node) {
+    function dragended(event: any, node: any) {
       if (!event.active) simulation.alphaTarget(0);
       (node.fx = null), (node.fy = null);
     }
@@ -201,28 +204,28 @@ const Visuals = ({ data }: VisualsProps) => {
 
     d3.select("#type_").on("click", () => {
       setCurrentData_("type");
-      circles.attr("fill", (d) => {
+      circles.attr("fill", (d: any) => {
         return type_[d.type];
       });
     });
 
     d3.select("#tag_").on("click", () => {
       setCurrentData_("tag");
-      circles.attr("fill", (d) => {
+      circles.attr("fill", (d: any) => {
         return tag_[d.tag];
       });
     });
 
     d3.select("#network_").on("click", () => {
       setCurrentData_("network");
-      circles.attr("fill", (d) => {
+      circles.attr("fill", (d: any) => {
         return network_[d.network];
       });
     });
 
     d3.select("#platform_").on("click", () => {
       setCurrentData_("platform");
-      circles.attr("fill", (d) => {
+      circles.attr("fill", (d: any) => {
         return platform_[d.platform];
       });
     });
@@ -236,16 +239,17 @@ const Visuals = ({ data }: VisualsProps) => {
       .force(
         "collide",
         d3.forceCollide((d) => {
+          // @ts-ignore
           return radiusScale(parseFloat(d.fee) * 8000) + 1.5;
         })
       );
 
     const ticked = () => {
       circles
-        .attr("cx", (d) => {
+        .attr("cx", (d: any) => {
           return d.x;
         })
-        .attr("cy", (d) => {
+        .attr("cy", (d: any) => {
           return d.y + 1;
         });
     };
