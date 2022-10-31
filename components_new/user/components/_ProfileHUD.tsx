@@ -66,6 +66,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
   const [stampIndex_, setStampIndex_] = useState(0);
 
   const stamps_ = data
+  // @ts-ignore
     ? data.STAMPS.filter((d) => d.stampedAssetType == "image")
     : [];
 
