@@ -54,6 +54,11 @@ AOI = [
         description: "Doesn't change dynamically, Pie chart is reponsive though.",
     },
     {
+        area: "Dashboard",
+        entry: "Access Analytics",
+        description: "Turning the bubbles into Arweave logos could be great for branding purposes.",
+    },
+    {
         area: "OVERALL",
         entry: "Acces application using a mobile device, not responsive",
         description: "The application is great for Desktop consumption, just need to make it mobile friendly",
