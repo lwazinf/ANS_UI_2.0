@@ -649,7 +649,7 @@ const ProfileHUD = ({ data }: ProfileHUDProps) => {
                       ? "opacity-0 duration-200"
                       : "opacity-100 duration-500"
                   }`}
-                  value={`https://${data?.ANS.currentLabel}.ar.page`}
+                  value={`https://ar.page/p/${data?.ANS.currentLabel}`}
                   viewBox={`0 0 256 256`}
                 />
               ) : (
