@@ -41,7 +41,7 @@ AOI = [
     {
         area: "HUD",
         entry: "Click on first icon from the bottom right to access the user's stamps, under developed UI",
-        description: "UI can be improved, not much to work with nor is there good/interesting/meaningful interactivity",
+        description: "UI can be improved, not much to work with nor is there good/interesting/meaningful interactivity.. TIMESTAMP also an issue: Year not converting.",
     },
     {
         area: "HUD",
